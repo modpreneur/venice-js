@@ -39,14 +39,14 @@ Application.start(function (isRoute) {
     removeLoadingBar();
 }, function (err) {
     console.error(err);
-    var bar = q('.header-loader .bar');
+    var bar = document.querySelector('.header-loader .bar');
     if (bar) {
         bar.style.backgroundColor = "#f00";
     }
 });
 
 function removeLoadingBar() {
-    var bars = qAll('.header-loader .bar');
+    var bars = document.querySelectorAll('.header-loader .bar');
     if (bars.length > 0) {
         (function () {
             _lodash2.default.map(bars, function (bar) {
@@ -54,7 +54,7 @@ function removeLoadingBar() {
             });
             var timeoutID = null;
             timeoutID = setTimeout(function () {
-                q('.header-loader').style.display = 'none';
+                document.querySelector('.header-loader').style.display = 'none';
                 clearTimeout(timeoutID);
             }, 2000);
         })();

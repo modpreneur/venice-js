@@ -48,10 +48,6 @@ export default [
         action: 'Product.newContentProduct'
     },
     {
-        path: '/admin/user/new(/)',
-        action: 'User.new'
-    },
-    {
         path: '/admin/user/tabs/:id(/)',
         action: 'User.tabs'
     },
@@ -66,10 +62,6 @@ export default [
     {
         path: '/admin/product-access/tabs/:id(/)',
         action: 'ProductAccess.tabs'
-    },
-    {
-        path: '/admin/product-access/new/:id(/)',
-        action: 'ProductAccess.new'
     }
 ];
 

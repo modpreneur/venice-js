@@ -25,24 +25,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Application = new _App2.default(_routes2.default, _controllers2.default);
 
 Application.start(function () {
-    console.log('app running');
+    console.log('App Loaded!');
+    removeLoadingBar();
 }, function (err) {
     console.error(err);
-    var bar = q('.header-loader .bar');
+    var bar = document.querySelector('.header-loader .bar');
     if (bar) {
         bar.style.backgroundColor = "#f00";
     }
 });
 
-// remove loading bar
-var bars = qAll('.header-loader .bar');
-if (bars.length > 0) {
-    _lodash2.default.map(bars, function (bar) {
-        bar.className += ' bar-end';
-    });
-    var timeoutID = null;
-    timeoutID = setTimeout(function () {
-        q('.header-loader').style.display = 'none';
-        clearTimeout(timeoutID);
-    }, 2000);
+function removeLoadingBar() {
+    var bars = document.querySelectorAll('.header-loader .bar');
+    if (bars.length > 0) {
+        (function () {
+            _lodash2.default.map(bars, function (bar) {
+                bar.className += ' bar-end';
+            });
+            var timeoutID = null;
+            timeoutID = setTimeout(function () {
+                document.querySelector('.header-loader').style.display = 'none';
+                clearTimeout(timeoutID);
+            }, 2000);
+        })();
+    }
 }
