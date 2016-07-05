@@ -8,7 +8,9 @@
     "src",
     "Controllers",
     "Libraries",
-    "*.js"
+    "Libraries/Components",
+    "*.js",
+    "*.jsx"
   ],
   "main": "index.js",
   "format": "es6",
@@ -17,7 +19,7 @@
     "url": "https://github.com/modpreneur/venice-js.git"
   },
   "scripts": {
-    "build": "babel --presets es2015 src/ -d ./"
+    "build": "babel --presets es2015 --presets react src/ -d ./"
   },
   "dependencies": {
     "fbemitter": ">=2.0.0",
@@ -46,8 +48,6 @@
     "babel-preset-stage-2": "^6.5.0",
     "babel-cli": "^6.6.5",
     "babel-runtime": "^6.6.1",
-    "core-js": "^2.2.1",
-    "webpack": "^1.12.15",
-    "webpack-dev-server": "^1.14.1"
+    "core-js": "^2.2.1"
   }
 }

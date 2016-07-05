@@ -1,13 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 /**
  * Created by fisa on 7/23/15.
  */
 
-exports.default = [{
+export default [{
     path: '/admin/product/new(/)',
     action: 'Product.new'
 }, {

@@ -30,13 +30,15 @@ export default class ProductController extends Controller {
         //On tabs load
         $scope.trinityTab.addListener('tab-load', function (e) {
 
-            $scope.veniceForms = $scope.veniceForms || {};
+            let form = e.element.q('form');
+            if(form){
+                $scope.veniceForms = $scope.veniceForms || {};
+                $scope.veniceForms[e.id] = new VeniceForm(form);
+            }
+            
             switch(e.id){
                 // Edit
                 case 'tab2': {
-                    let form = e.element.q('form');
-                    $scope.veniceForms[e.id] = new VeniceForm(form);
-
                     unlisteners.push(ProductController._handleHandleGeneration());
 
                     $scope.veniceForms['tab2'].success(()=>{

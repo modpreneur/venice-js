@@ -18,10 +18,12 @@ export default class ContetntController extends Controller {
 
         //On tabs load
         $scope.trinityTab.addListener('tab-load', function(e) {
-            if(e.id === 'tab2') {
-                let form = e.element.q('form');
+            let form = e.element.q('form');
+            if(form){
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
+            }
+            if(e.id === 'tab2') {
                 $scope.veniceForms['tab2'].success(()=>{
                     $scope.trinityTab.reload('tab1');
                 });

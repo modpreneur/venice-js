@@ -5,7 +5,9 @@ import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import TrinityTab from 'trinity/components/TrinityTab';
-import Events from 'trinity/utils/Events';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
 import $ from 'jquery';
 
 export default class BlogArticleController extends Controller {
@@ -21,13 +23,39 @@ export default class BlogArticleController extends Controller {
         //On tabs load
         $scope.trinityTab.addListener('tab-load', function (e) {
 
-            $scope.veniceForms = $scope.veniceForms || {};
-            if(e.id == 'tab2') {
-                let form = e.element.q('form');
-
+            let form = e.element.q('form');
+            if(form){
+                $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
+            }
+            if(e.id == 'tab2') {
                 let article = $('#blog_article_content');
                 article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+
+                let helper = $('#blog-article-date-format')[0];
+                let dateEl = $('#blog_article_dateToPublish')[0];
+                let div = document.createElement('div');
+                dateEl.parentNode.appendChild(div);
+                let limits = JSON.parse(dateEl.getAttribute('data-limit'));
+                let min = BlogArticleController._parseDate(limits.min);
+                let max = BlogArticleController._parseDate(limits.max);
+
+                let fromDate = React.createElement(NecktieDateAndTime, {
+                    minDate: min,
+                    maxDate: max,
+                    type: 'd',
+                    format: helper.value,
+                    value: new Date(helper.getAttribute('data-dateVal')*1000),
+                    isNew: true,
+                    oldElem: dateEl
+                });
+
+                ReactDOM.render(fromDate, div);
+
+                let popupContainer = q.class('rw-popup-container');
+                _.each(popupContainer,(popup) => {
+                    popup.style.width = '100%';
+                });
 
                 BlogArticleController._handleHandleGeneration();
             }
@@ -41,14 +69,46 @@ export default class BlogArticleController extends Controller {
     newAction($scope) {
         $scope.form = new VeniceForm($('form[name="blog_article"]')[0], VeniceForm.formType.NEW);
 
-        let article = $('#blog_article_content');
-        console.log(article);
-        // article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
-        //
+        let format = $('#blog-article-date-format')[0].value;
+        let dateEl = $('#blog_article_dateToPublish')[0];
+        let div = document.createElement('div');
+        dateEl.parentNode.appendChild(div);
+        let limits = JSON.parse(dateEl.getAttribute('data-limit'));
+        let min = BlogArticleController._parseDate(limits.min);
+        let max = BlogArticleController._parseDate(limits.max);
+
+        let fromDate = React.createElement(NecktieDateAndTime, {
+            minDate: min,
+            maxDate: max,
+            type: 'd',
+            format: format,
+            value: new Date(),
+            isNew: true,
+            oldElem: dateEl
+        });
+
+        ReactDOM.render(fromDate, div);
+
+        let popupContainer = q.class('rw-popup-container');
+        _.each(popupContainer,(popup) => {
+            popup.style.width = '100%';
+        });
+
         BlogArticleController._handleHandleGeneration();
+
+        // let article = $('#blog_article_content');
+        // article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
     }
 
     static _handleHandleGeneration() {
         return handleHandleGeneration($('#blog-article-form').attr('data-slugify'),$('#blog_article_title')[0], $('#blog_article_handle')[0]);
+    }
+
+    static _parseDate(date){
+        if(date === 'now'){
+            return new Date();
+        } else {
+            return new Date(date.year,date.month || 11, date.day || 31);
+        }
     }
 }
