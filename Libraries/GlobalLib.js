@@ -1,29 +1,45 @@
-/**
- * Created by rockuo on 23.6.16.
- */
+'use strict';
 
-import Gateway from 'trinity/Gateway';
-import Events from 'trinity/utils/Events';
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.slugify = slugify;
+exports.handleHandleGeneration = handleHandleGeneration;
+
+var _Gateway = require('trinity/Gateway');
+
+var _Gateway2 = _interopRequireDefault(_Gateway);
+
+var _Events = require('trinity/utils/Events');
+
+var _Events2 = _interopRequireDefault(_Events);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  *
  * @param route {string}
  * @param sourceField  {HTMLInputElement}
  * @param outputField {HTMLInputElement}
  */
-export function slugify(route, sourceField, outputField) {
-    Gateway.postJSON(route, { string: sourceField.value }, function (response) {
+/**
+ * Created by rockuo on 23.6.16.
+ */
+
+function slugify(route, sourceField, outputField) {
+    _Gateway2.default.postJSON(route, { string: sourceField.value }, function (response) {
         outputField.value = response.body.handle;
-    }, err => {
+    }, function (err) {
         console.error(err);
     });
 }
 
-export function handleHandleGeneration(route, titleField, handleField) {
+function handleHandleGeneration(route, titleField, handleField) {
     if (titleField && handleField) {
-        return Events.listen(titleField, 'input', () => {
+        return _Events2.default.listen(titleField, 'input', function () {
             slugify(route, titleField, handleField);
         });
     } else {
-        return () => {};
+        return function () {};
     }
 }

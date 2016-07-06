@@ -4,10 +4,15 @@
 
 import Controller from 'trinity/Controller';
 import TrinityTab from 'trinity/components/TrinityTab';
-import _ from 'lodash';
 import VeniceForm from '../Libraries/VeniceForm';
+import GridBuilder from '../Libraries/VeniceGridBuilder';
+import $ from 'jquery';
 
 export default class ContetntController extends Controller {
+
+    indexAction($scope) {
+        $scope.productGrid = GridBuilder.build($('#user-grid')[0], this.request.query);
+    }
 
     /**
      * @param $scope
@@ -27,6 +32,10 @@ export default class ContetntController extends Controller {
                 $scope.veniceForms['tab2'].success(()=>{
                     $scope.trinityTab.reload('tab1');
                 });
+            } else if (e.id === 'tab3') {
+                let gridConf =  $('#product-access-grid')[0];
+                if(gridConf)
+                    $scope.userGrid = GridBuilder.build(gridConf, this.request.query);
             }
         }, this);
     }

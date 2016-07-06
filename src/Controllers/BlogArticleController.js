@@ -9,8 +9,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
 import $ from 'jquery';
+import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class BlogArticleController extends Controller {
+
+    indexAction($scope) {
+        $scope.productGrid = GridBuilder.build($('#blog-article-grid')[0], this.request.query);
+    }
 
     /**
      * Tabs action

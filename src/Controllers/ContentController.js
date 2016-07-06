@@ -11,8 +11,13 @@ import VeniceForm from '../Libraries/VeniceForm';
 import $ from 'jquery';
 import {slugify, handleHandleGeneration} from '../Libraries/GlobalLib';
 import FormChanger from '../Libraries/FormChanger';
+import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class ContetntController extends Controller {
+
+    indexAction($scope) {
+        $scope.productGrid = GridBuilder.build($('#content-grid')[0], this.request.query);
+    }
 
     newAction($scope) {
         let select = $('#entity_type_select')[0],
@@ -71,6 +76,10 @@ export default class ContetntController extends Controller {
                     $scope.trinityTab.reload('tab1');
                 });
                 unlisteners.push(ContetntController._handleHandleGeneration());
+            }else if(e.id === 'tab3') {
+                let conf =$('#product-grid')[0];
+                if(conf)
+                    $scope.productGrid = GridBuilder.build(conf, this.request.query);
             }
 
         }, this);

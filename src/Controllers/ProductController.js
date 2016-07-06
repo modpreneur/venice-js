@@ -11,12 +11,13 @@ import {messageService} from 'trinity/Services';
 import _ from 'lodash';
 import Controller from 'trinity/Controller';
 import $ from 'jquery';
+import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class ProductController extends Controller {
 
-    //indexAction($scope) {
-    //    $scope.productGrid = GridBuilder.build(q.id('product-grid'), this.request.query);
-    //}
+    indexAction($scope) {
+       $scope.productGrid = GridBuilder.build($('#product-grid')[0], this.request.query);
+    }
 
 
     newAction($scope) {
@@ -45,15 +46,24 @@ export default class ProductController extends Controller {
                         $scope.trinityTab.reload('tab1');
                     });
                 } break;
+                case 'tab3': {
+                    let conf =$('#content-grid')[0];
+                    if(conf)
+                        $scope.productGrid = GridBuilder.build(conf, this.request.query);
+                }
                 case 'tab4':{
+                    let gridConf = $('#billing-plan-grid')[0];
+                    if(gridConf)
+                        $scope.bilingPlanGrid = GridBuilder.build(gridConf, this.request.query);
+
                     window.setAsDefault = function(id){ //this way work in grids so i let it this way
                         let currentTarget=$(`#${id}`)[0];
 
                         currentTarget.style.display='none';
 
                         let billingPlanId = id.substr(id.lastIndexOf('-')+1);
-                        q.id('loading-icon-for-default-id-'+billingPlanId).style.display='block';
-
+                        let loadingIcon = $(`#loading-icon-for-default-id-${billingPlanId}`);
+                        loadingIcon.css( 'display','block' );
                         Gateway.putJSON(currentTarget.dataset.href, null, function (response) {
                             let pins = $('.set-default');
                             _.each($('.is-default'), (isD,id) => {
@@ -63,18 +73,21 @@ export default class ProductController extends Controller {
                                     return false;
                                 }
                             });
-                            $(`#loading-icon-for-default-id-${billingPlanId}`).css( 'display','none' );
                             $(`#is-default-id-${billingPlanId}`).css( 'display','block' );
                             messageService(response.body.message,'success');
                             $scope.trinityTab.reload('tab1');
                         }, function (error) {
-                            messageService('Default billing plan could not be changed.', 'warning');
-                            $(`#loading-icon-for-default-id-${billingPlanId}`).style.display = 'none';
+                            messageService(error.response.body.message, 'warning');
                             currentTarget.style.display='block';
+                            
                         });
+                        loadingIcon.css( 'display','none' );
                     };
 
-                }
+                }break;
+                case 'tab5':{
+                    $scope.productGrid = GridBuilder.build($('#blog-article-grid')[0], this.request.query);
+                }break;
             }
         }, this);
 

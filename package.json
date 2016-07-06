@@ -4,11 +4,15 @@
   "directories": {
     "lib": "src"
   },
+  "babel": {
+    "presets": ["es2015","react", "stage-2"]
+  },
   "files": [
     "src",
     "Controllers",
     "Libraries",
     "Libraries/Components",
+    "Lib",
     "*.js",
     "*.jsx"
   ],
@@ -19,7 +23,7 @@
     "url": "https://github.com/modpreneur/venice-js.git"
   },
   "scripts": {
-    "build": "babel --presets es2015 --presets react src/ -d ./"
+    "build": "babel src/ --out-dir lib -d ./"
   },
   "dependencies": {
     "fbemitter": ">=2.0.0",

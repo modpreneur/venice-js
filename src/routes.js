@@ -4,10 +4,12 @@
 
 export default [
     {
+        path: '/admin/product(/)',
+        action: 'Product.index'
+    }, {
         path: '/admin/product/new(/)',
         action: 'Product.new'
-    },
-    {
+    }, {
         path: '/admin/product/tabs/:id(/)',
         action: 'Product.tabs'
     },
@@ -24,8 +26,16 @@ export default [
         action: 'BlogArticle.new'
     },
     {
+        path: '/admin/blogArticle(/)',
+        action: 'BlogArticle.index'
+    },
+    {
         path: '/admin/content/tabs/:id(/)',
         action: 'Content.tabs'
+    },
+    {
+        path: '/admin/content(/)',
+        action: 'Content.index'
     },
     {
         path: '/admin/content/content-product/tabs/:id(/)',
@@ -46,6 +56,10 @@ export default [
     {
         path: '/admin/product/:id/content-product/new(/)',
         action: 'Product.newContentProduct'
+    },
+    {
+        path: '/admin/user(/)',
+        action: 'User.index'
     },
     {
         path: '/admin/user/tabs/:id(/)',

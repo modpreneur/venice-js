@@ -29,6 +29,7 @@ export default class ProductAccessController extends Controller {
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
+            
 
         }, this);
     }
