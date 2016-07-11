@@ -9,7 +9,6 @@
     "*.js",
     "*.jsx"
   ],
-  "main": "index.js",
   "format": "es6",
   "repository": {
     "type": "git",
