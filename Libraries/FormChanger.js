@@ -2,7 +2,7 @@
  * Created by Jakub on 09.02.16.
  */
 
-import Gateway from '../node_modules/trinity/Gateway';
+import Gateway from 'trinity/Gateway';
 
 // Used for switching similar forms and copying it's data from form to form
 export default class FormChanger {

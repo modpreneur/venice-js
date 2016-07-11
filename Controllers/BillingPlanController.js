@@ -2,9 +2,9 @@
  * Created by Jakub Fajkus on 10.12.15.
  */
 
-import Controller from '../node_modules/trinity/Controller';
+import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
+import TrinityTab from 'trinity/components/TrinityTab';
 
 export default class BillingPlanController extends Controller {
     

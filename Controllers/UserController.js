@@ -2,8 +2,8 @@
  * Created by Jakub Fajkus on 28.12.15.
  */
 
-import Controller from '../node_modules/trinity/Controller';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
+import Controller from 'trinity/Controller';
+import TrinityTab from 'trinity/components/TrinityTab';
 import VeniceForm from '../Libraries/VeniceForm';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 import $ from 'jquery';

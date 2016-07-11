@@ -1,15 +1,15 @@
 /**
  * Created by Jakub Fajkus on 10.12.15.
  */
-import Controller from '../node_modules/trinity/Controller';
+import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
+import TrinityTab from 'trinity/components/TrinityTab';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
 import $ from 'jquery';
-import '../node_modules/froala-editor/js/froala_editor.min.js';
+import 'froala-editor/js/froala_editor.min.js';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class BlogArticleController extends Controller {

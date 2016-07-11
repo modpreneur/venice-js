@@ -2,17 +2,17 @@
  * Created by Jakub on 21.12.15.
  */
 
-import Events from '../node_modules/trinity/utils/Events';
-import Controller from '../node_modules/trinity/Controller';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
-import Collection from '../node_modules/trinity/Collection';
+import Events from 'trinity/utils/Events';
+import Controller from 'trinity/Controller';
+import TrinityTab from 'trinity/components/TrinityTab';
+import Collection from 'trinity/Collection';
 import _ from 'lodash';
 import VeniceForm from '../Libraries/VeniceForm';
 import $ from 'jquery';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import FormChanger from '../Libraries/FormChanger';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
-import '../node_modules/froala-editor/js/froala_editor.min.js';
+import 'froala-editor/js/froala_editor.min.js';
 
 export default class ContetntController extends Controller {
 

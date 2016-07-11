@@ -3,13 +3,13 @@
  */
 
 
-import Gateway from '../node_modules/trinity/Gateway';
+import Gateway from 'trinity/Gateway';
 import VeniceForm from '../Libraries/VeniceForm';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
+import TrinityTab from 'trinity/components/TrinityTab';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
-import {messageService} from '../node_modules/trinity/Services';
+import {messageService} from '/trinity/Services';
 import _ from 'lodash';
-import Controller from '../node_modules/trinity/Controller';
+import Controller from 'trinity/Controller';
 import $ from 'jquery';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 

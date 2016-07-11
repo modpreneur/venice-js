@@ -2,8 +2,8 @@
  * Created by rockuo on 23.6.16.
  */
 
-import Gateway from '../node_modules/trinity/Gateway';
-import Events from '../node_modules/trinity/utils/Events';
+import Gateway from 'trinity/Gateway';
+import Events from 'trinity/utils/Events';
 /**
  *
  * @param route {string}

@@ -4,9 +4,9 @@
 'use strict';
 
 import _ from 'lodash';
-import TrinityForm from '../node_modules/trinity/components/TrinityForm';
-import Debug from '../node_modules/trinity/Debug';
-import {messageService} from '../node_modules/trinity/Services';
+import TrinityForm from 'trinity/components/TrinityForm';
+import Debug from 'trinity/Debug';
+import {messageService} from 'trinity/Services';
 
 const defaultSettings = {
     button : { // Defines which classes add to active button in which state

@@ -4,10 +4,10 @@
 'use strict';
 
 import _ from 'lodash';
-import Gateway from '../../node_modules/trinity/Gateway';
+import Gateway from 'trinity/Gateway';
 // TODO: make it settable - hopefully one day
 import QueryBuilder from './TrinityQueryBuilder';
-import Store from '../../node_modules/flux/lib/FluxStore';
+import Store from 'flux/lib/FluxStore';
 import History from './GlobalHistory';
 // import Services from 'trinity/services';
 

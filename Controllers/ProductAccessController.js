@@ -3,10 +3,10 @@
  */
 
 
-import events from '../node_modules/trinity/utils/closureEvents';
-import Controller from '../node_modules/trinity/Controller';
+import events from 'trinity/utils/closureEvents';
+import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
-import TrinityTab from '../node_modules/trinity/components/TrinityTab';
+import TrinityTab from 'trinity/components/TrinityTab';
 
 export default class ProductAccessController extends Controller {
 
