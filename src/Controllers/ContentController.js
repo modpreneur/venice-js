@@ -9,9 +9,10 @@ import Collection from 'trinity/Collection';
 import _ from 'lodash';
 import VeniceForm from '../Libraries/VeniceForm';
 import $ from 'jquery';
-import {slugify, handleHandleGeneration} from '../Libraries/GlobalLib';
+import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import FormChanger from '../Libraries/FormChanger';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
+import 'froala-editor/js/froala_editor.min';
 
 export default class ContetntController extends Controller {
 

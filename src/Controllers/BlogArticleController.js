@@ -9,6 +9,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
 import $ from 'jquery';
+import 'froala-editor/js/froala_editor.min';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class BlogArticleController extends Controller {
@@ -51,17 +52,11 @@ export default class BlogArticleController extends Controller {
                     type: 'd',
                     format: helper.value,
                     value: new Date(helper.getAttribute('data-dateVal')*1000),
-                    isNew: true,
                     oldElem: dateEl
                 });
 
                 ReactDOM.render(fromDate, div);
-
-                let popupContainer = q.class('rw-popup-container');
-                _.each(popupContainer,(popup) => {
-                    popup.style.width = '100%';
-                });
-
+                
                 BlogArticleController._handleHandleGeneration();
             }
         }, this);
@@ -88,21 +83,19 @@ export default class BlogArticleController extends Controller {
             type: 'd',
             format: format,
             value: new Date(),
-            isNew: true,
-            oldElem: dateEl
+            oldElem: dateEl,
+            required: true
         });
 
+        dateEl.required = true;
         ReactDOM.render(fromDate, div);
-
-        let popupContainer = q.class('rw-popup-container');
-        _.each(popupContainer,(popup) => {
-            popup.style.width = '100%';
-        });
 
         BlogArticleController._handleHandleGeneration();
 
-        // let article = $('#blog_article_content');
-        // article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+        let article = $('#blog_article_content');
+        article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+        var notLicenced = $('a[href="https://froala.com/wysiwyg-editor"]');
+        notLicenced.parent().css('display','none');
     }
 
     static _handleHandleGeneration() {

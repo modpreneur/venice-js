@@ -22,11 +22,14 @@ export default class NecktieDateAndTime extends React.Component {
         super(props);
 
         momentLocalizer(moment);
-        this.state = {value: this.props.value}; // Initial state
-        if (this.props.func) {
-            this.props.func(this);
+        this.state = {value: props.value}; // Initial state
+        if (props.func) {
+            props.func(this);
         }
-        this.props.oldElem.style.display = 'none';
+        props.oldElem.style.display = 'none';
+        if(props.required){
+            props.oldElem.value = moment(props.value).format(dateFormMap[props.type]);
+        }
     }
 
     render() {
@@ -84,14 +87,4 @@ function getLongFormat(format) {
     });
     return longFormat;
 
-    // return format
-    //     .replace(/Y/, 'YYYY')
-    //     .replace(/i/, 'mm')
-    //     .replace(/h/, 'hh')
-    //     .replace(/D/, 'ddd')
-    //     .replace(/d/, 'DD')
-    //     .replace(/M/, 'MMM')
-    //     .replace(/m/, 'MM')
-    //     .replace(/H/, 'HH')
-    //     .replace(/s/, 'ss');
 }

@@ -5,7 +5,11 @@
     "lib": "src"
   },
   "babel": {
-    "presets": ["es2015","react", "stage-2"]
+    "presets": [
+      "es2015",
+      "react",
+      "stage-2"
+    ]
   },
   "files": [
     "src",
@@ -27,11 +31,11 @@
   },
   "dependencies": {
     "fbemitter": ">=2.0.0",
-    "lodash": ">=3.10.1",
-    "superagent": "^1.8.3",
     "flux": "^2.1.1",
+    "froala-editor": "^2.3.3",
     "history": "2.1.0",
     "jquery": "^2.2.3",
+    "lodash": ">=3.10.1",
     "moment": "^2.13.0",
     "mousetrap": "^1.5.3",
     "react": "^15.0.2",
@@ -41,6 +45,7 @@
     "react-dropzone": "^3.4.0",
     "react-paginate": "^2.0.1",
     "react-widgets": "^3.2.4",
+    "superagent": "^1.8.3",
     "trinity": "git+https://git@github.com/modpreneur/trinityJS.git#master"
   },
   "devDependencies": {
