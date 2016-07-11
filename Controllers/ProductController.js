@@ -7,7 +7,7 @@ import Gateway from 'trinity/Gateway';
 import VeniceForm from '../Libraries/VeniceForm';
 import TrinityTab from 'trinity/components/TrinityTab';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
-import {messageService} from '/trinity/Services';
+import {messageService} from 'trinity/Services';
 import _ from 'lodash';
 import Controller from 'trinity/Controller';
 import $ from 'jquery';
