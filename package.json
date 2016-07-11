@@ -1,9 +1,6 @@
 {
   "name": "venice-js",
   "version": "0.0.1",
-  "directories": {
-    "lib": "src"
-  },
   "babel": {
     "presets": [
       "es2015",
@@ -12,11 +9,10 @@
     ]
   },
   "files": [
-    "src",
     "Controllers",
     "Libraries",
     "Libraries/Components",
-    "Lib",
+    "lib",
     "*.js",
     "*.jsx"
   ],
@@ -25,9 +21,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/modpreneur/venice-js.git"
-  },
-  "scripts": {
-    "build": "babel src/ --out-dir lib -d ./"
   },
   "dependencies": {
     "fbemitter": ">=2.0.0",

@@ -1,40 +1,16 @@
 'use strict';
+import BillingPlanController from 'Controllers/BillingPlanController.js';
+import BlogArticleController from 'Controllers/BlogArticleController.js';
+import ContentController from 'Controllers/ContentController.js';
+import ProductAccessController from 'Controllers/ProductAccessController.js';
+import ProductController from 'Controllers/ProductController.js';
+import UserController from 'Controllers/UserController.js';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _BillingPlanController = require('./Controllers/BillingPlanController.js');
-
-var _BillingPlanController2 = _interopRequireDefault(_BillingPlanController);
-
-var _BlogArticleController = require('./Controllers/BlogArticleController.js');
-
-var _BlogArticleController2 = _interopRequireDefault(_BlogArticleController);
-
-var _ContentController = require('./Controllers/ContentController.js');
-
-var _ContentController2 = _interopRequireDefault(_ContentController);
-
-var _ProductAccessController = require('./Controllers/ProductAccessController.js');
-
-var _ProductAccessController2 = _interopRequireDefault(_ProductAccessController);
-
-var _ProductController = require('./Controllers/ProductController.js');
-
-var _ProductController2 = _interopRequireDefault(_ProductController);
-
-var _UserController = require('./Controllers/UserController.js');
-
-var _UserController2 = _interopRequireDefault(_UserController);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    'BillingPlanController': _BillingPlanController2.default,
-    'BlogArticleController': _BlogArticleController2.default,
-    'ContentController': _ContentController2.default,
-    'ProductAccessController': _ProductAccessController2.default,
-    'ProductController': _ProductController2.default,
-    'UserController': _UserController2.default
+export default {
+    'BillingPlanController': BillingPlanController,
+    'BlogArticleController': BlogArticleController,
+    'ContentController': ContentController,
+    'ProductAccessController': ProductAccessController,
+    'ProductController': ProductController,
+    'UserController': UserController
 };

@@ -5,8 +5,8 @@
 
 import React from 'react';
 import moment from 'moment';
-import momentLocalizer from 'react-widgets/lib/localizers/moment';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import momentLocalizer from '../../node_modules/react-widgets/lib/localizers/moment';
+import DateTimePicker from '../../node_modules/react-widgets/lib/DateTimePicker';
 import _ from 'lodash';
 
 const dateFormMap = {
