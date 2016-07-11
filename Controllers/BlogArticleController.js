@@ -36,6 +36,8 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+require('froala-editor/js/froala_editor.min');
+
 var _VeniceGridBuilder = require('../Libraries/VeniceGridBuilder');
 
 var _VeniceGridBuilder2 = _interopRequireDefault(_VeniceGridBuilder);
@@ -103,16 +105,10 @@ var BlogArticleController = function (_Controller) {
                         type: 'd',
                         format: helper.value,
                         value: new Date(helper.getAttribute('data-dateVal') * 1000),
-                        isNew: true,
                         oldElem: dateEl
                     });
 
                     _reactDom2.default.render(fromDate, div);
-
-                    var popupContainer = q.class('rw-popup-container');
-                    _.each(popupContainer, function (popup) {
-                        popup.style.width = '100%';
-                    });
 
                     BlogArticleController._handleHandleGeneration();
                 }
@@ -143,21 +139,19 @@ var BlogArticleController = function (_Controller) {
                 type: 'd',
                 format: format,
                 value: new Date(),
-                isNew: true,
-                oldElem: dateEl
+                oldElem: dateEl,
+                required: true
             });
 
+            dateEl.required = true;
             _reactDom2.default.render(fromDate, div);
-
-            var popupContainer = q.class('rw-popup-container');
-            _.each(popupContainer, function (popup) {
-                popup.style.width = '100%';
-            });
 
             BlogArticleController._handleHandleGeneration();
 
-            // let article = $('#blog_article_content');
-            // article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+            var article = (0, _jquery2.default)('#blog_article_content');
+            article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+            var notLicenced = (0, _jquery2.default)('a[href="https://froala.com/wysiwyg-editor"]');
+            notLicenced.parent().css('display', 'none');
         }
     }], [{
         key: '_handleHandleGeneration',

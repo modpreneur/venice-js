@@ -52,11 +52,14 @@ var NecktieDateAndTime = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NecktieDateAndTime).call(this, props));
 
         (0, _moment4.default)(_moment2.default);
-        _this.state = { value: _this.props.value }; // Initial state
-        if (_this.props.func) {
-            _this.props.func(_this);
+        _this.state = { value: props.value }; // Initial state
+        if (props.func) {
+            props.func(_this);
         }
-        _this.props.oldElem.style.display = 'none';
+        props.oldElem.style.display = 'none';
+        if (props.required) {
+            props.oldElem.value = (0, _moment2.default)(props.value).format(dateFormMap[props.type]);
+        }
         return _this;
     }
 
@@ -121,15 +124,4 @@ function getLongFormat(format) {
         longFormat += changeTo[char] ? char.replace(char, changeTo[char]) : char;
     });
     return longFormat;
-
-    // return format
-    //     .replace(/Y/, 'YYYY')
-    //     .replace(/i/, 'mm')
-    //     .replace(/h/, 'hh')
-    //     .replace(/D/, 'ddd')
-    //     .replace(/d/, 'DD')
-    //     .replace(/M/, 'MMM')
-    //     .replace(/m/, 'MM')
-    //     .replace(/H/, 'HH')
-    //     .replace(/s/, 'ss');
 }

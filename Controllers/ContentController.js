@@ -44,6 +44,8 @@ var _VeniceGridBuilder = require('../Libraries/VeniceGridBuilder');
 
 var _VeniceGridBuilder2 = _interopRequireDefault(_VeniceGridBuilder);
 
+require('froala-editor/js/froala_editor.min');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
