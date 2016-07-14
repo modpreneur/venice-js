@@ -3,7 +3,7 @@
  */
 import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
-import {handleHandleGeneration} from '../Libraries/GlobalLib';
+import {handleHandleGeneration, inicializeFroala} from '../Libraries/GlobalLib';
 import TrinityTab from 'trinity/components/TrinityTab';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -93,7 +93,9 @@ export default class BlogArticleController extends Controller {
         BlogArticleController._handleHandleGeneration();
 
         let article = $('#blog_article_content');
-        article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+        inicializeFroala(article,JSON.parse(article[0].getAttribute('data-settings')) );
+
+        
         var notLicenced = $('a[href="https://froala.com/wysiwyg-editor"]');
         notLicenced.parent().css('display','none');
     }
