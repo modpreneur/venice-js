@@ -42,7 +42,7 @@ export function inicializeFroala(element, settings) {
     element.on('froalaEditor.input', function () {
         console.log('input');
         let button = $('.trinity-form-error');
-        if(button) {
+        if(button[0]) {
             button[0].disabled = false;
             button.first().removeClass('trinity-form-error');
         }
