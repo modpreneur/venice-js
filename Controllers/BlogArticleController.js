@@ -1,21 +1,23 @@
 /**
  * Created by Jakub Fajkus on 10.12.15.
  */
+'use strict';
+
+import $ from 'jquery';
 import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
-import {handleHandleGeneration, inicializeFroala} from '../Libraries/GlobalLib';
+import {handleHandleGeneration, initializeFroala} from '../Libraries/GlobalLib';
 import TrinityTab from 'trinity/components/TrinityTab';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
-import $ from 'jquery';
-import 'froala-editor/js/froala_editor.min.js';
+import 'froala-editor/js/froala_editor.min.js'; // Extends jquery
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class BlogArticleController extends Controller {
 
     indexAction($scope) {
-        $scope.productGrid = GridBuilder.build($('#blog-article-grid')[0], this.request.query);
+        $scope.productGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
     }
 
     /**
@@ -27,39 +29,42 @@ export default class BlogArticleController extends Controller {
         $scope.trinityTab = new TrinityTab();
 
         //On tabs load
-        $scope.trinityTab.addListener('tab-load', function (e) {
+        $scope.trinityTab.addListener('tab-load', (e)=>{
 
-            let form = e.element.q('form');
+            let form = $('form', e.element)[0];
             if(form){
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
-            if(e.id == 'tab2') {
-                let article = $('#blog_article_content');
-                article.froalaEditor(JSON.parse(article[0].getAttribute('data-settings')));
+            if(e.id === 'tab2') {
+                let $article = $('#blog_article_content');
+                $article.froalaEditor(JSON.parse($article.attr('data-settings')));
 
-                let helper = $('#blog-article-date-format')[0];
-                let dateEl = $('#blog_article_dateToPublish')[0];
-                let div = document.createElement('div');
+                let helper = $.id('blog-article-date-format'),
+                    dateEl = $.id('blog_article_dateToPublish'),
+                    div = document.createElement('div')
+                    ;
+
                 dateEl.parentNode.appendChild(div);
-                let limits = JSON.parse(dateEl.getAttribute('data-limit'));
-                let min = BlogArticleController._parseDate(limits.min);
-                let max = BlogArticleController._parseDate(limits.max);
+
+                let limits = JSON.parse(dateEl.getAttribute('data-limit')),
+                    min = BlogArticleController._parseDate(limits.min),
+                    max = BlogArticleController._parseDate(limits.max)
+                    ;
 
                 let fromDate = React.createElement(NecktieDateAndTime, {
-                    minDate: min,
-                    maxDate: max,
-                    type: 'd',
-                    format: helper.value,
-                    value: new Date(helper.getAttribute('data-dateVal')*1000),
-                    oldElem: dateEl
-                });
+                        minDate: min,
+                        maxDate: max,
+                        type: 'd',
+                        format: helper.value,
+                        value: new Date(helper.getAttribute('data-dateVal') * 1000),
+                        oldElem: dateEl
+                    });
 
                 ReactDOM.render(fromDate, div);
-                
                 BlogArticleController._handleHandleGeneration();
             }
-        }, this);
+        });
     }
 
     /**
@@ -67,15 +72,18 @@ export default class BlogArticleController extends Controller {
      * @param $scope
      */
     newAction($scope) {
-        $scope.form = new VeniceForm($('form[name="blog_article"]')[0], VeniceForm.formType.NEW);
+        $scope.form = new VeniceForm($('form[name="blog_article"]')[0]);
 
-        let format = $('#blog-article-date-format')[0].value;
-        let dateEl = $('#blog_article_dateToPublish')[0];
+        let format = $.id('blog-article-date-format').value,
+            dateEl = $.id('blog_article_dateToPublish');
+
         let div = document.createElement('div');
         dateEl.parentNode.appendChild(div);
-        let limits = JSON.parse(dateEl.getAttribute('data-limit'));
-        let min = BlogArticleController._parseDate(limits.min);
-        let max = BlogArticleController._parseDate(limits.max);
+
+        let limits = JSON.parse(dateEl.getAttribute('data-limit')),
+            min = BlogArticleController._parseDate(limits.min),
+            max = BlogArticleController._parseDate(limits.max)
+            ;
 
         let fromDate = React.createElement(NecktieDateAndTime, {
             minDate: min,
@@ -92,23 +100,39 @@ export default class BlogArticleController extends Controller {
 
         BlogArticleController._handleHandleGeneration();
 
-        let article = $('#blog_article_content');
-        inicializeFroala(article,JSON.parse(article[0].getAttribute('data-settings')) );
+        let $article = $('#blog_article_content');
+        initializeFroala($article, JSON.parse($article.attr('data-settings')));
 
-        
-        var notLicenced = $('a[href="https://froala.com/wysiwyg-editor"]');
-        notLicenced.parent().css('display','none');
-    }
-
-    static _handleHandleGeneration() {
-        return handleHandleGeneration($('#blog-article-form').attr('data-slugify'),$('#blog_article_title')[0], $('#blog_article_handle')[0]);
-    }
-
-    static _parseDate(date){
-        if(date === 'now'){
-            return new Date();
-        } else {
-            return new Date(date.year,date.month || 11, date.day || 31);
+        // HIDE TRIAL VERSION BANNER
+        if(DEVELOPMENT){
+            let $notLicenced = $('a[href="https://froala.com/wysiwyg-editor"]');
+            if($notLicenced[0]){
+                $notLicenced.parent().css('display','none');
+            }
         }
+    }
+
+    /**
+     * Shortcut
+     * @returns {*}
+     * @private
+     */
+    static _handleHandleGeneration() {
+        return handleHandleGeneration(
+            $('#blog-article-form').attr('data-slugify'),
+            $.id('blog_article_title'),
+            $.id('blog_article_handle')
+        );
+    }
+
+    /**
+     * Parse date object from venice
+     * @param date
+     * @returns {Date}
+     * @private
+     */
+    static _parseDate(date){
+        return date === 'now' ?
+            new Date() : new Date(date.year, date.month || 11, date.day || 31);
     }
 }

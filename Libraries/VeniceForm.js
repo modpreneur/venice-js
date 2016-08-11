@@ -3,9 +3,9 @@
  */
 'use strict';
 
+import $ from 'jquery';
 import _ from 'lodash';
 import TrinityForm from 'trinity/components/TrinityForm';
-import Debug from 'trinity/Debug';
 import {messageService} from 'trinity/Services';
 
 const defaultSettings = {
@@ -14,16 +14,20 @@ const defaultSettings = {
         success: 'trinity-form-success',
         timeout: 'trinity-form-timeout trinity-form-error'
     },
-    requestTimeout: Debug.isDev() ? 60000 : 10000
+    requestTimeout: 10000
 };
 
+if(DEVELOPMENT){
+    defaultSettings.requestTimeout = 60000;
+}
+
 export default class VeniceForm extends TrinityForm {
-    constructor(element, type, settings){
-        super(element, type, _.defaultsDeep(settings || {}, defaultSettings));
+    constructor(element, settings){
+        super(element, _.defaultsDeep(settings || {}, defaultSettings));
         this.success(this.__onSuccess, this);
         this.error(this.__onError, this);
 
-        if(Debug.isDev()){
+        if(DEVELOPMENT){
             this.addListener('submit-data', (data)=>{
                 console.log('JSON DATA:', data);
             });
@@ -32,24 +36,28 @@ export default class VeniceForm extends TrinityForm {
 
     /**
      * Success Callback
-     * @param response
+     * @param e {Object} Event
      * @private
      */
-    __onSuccess(response){
+    __onSuccess(e){
+        let response = e.data;
         messageService(response.body['message'],'success');
-        if(Debug.isDev()){
+        if(DEVELOPMENT){
             console.log('Success', response);
         }
     }
 
     /**
      * Error callback
-     * @param error
+     * @param e {Object} Event
      * @private
      */
-    __onError(error){
-        Debug.error('ERROR', error);
-        Debug.error(error.response);
+    __onError(e){
+        let error = e.data;
+        if(DEVELOPMENT){
+            console.error('ERROR', error);
+            console.log(error.response);
+        }
         if(error.timeout){
             messageService('Request Timed out.<br>Try Again i few seconds.', 'error');
             return;
@@ -57,7 +65,7 @@ export default class VeniceForm extends TrinityForm {
 
         // Parse error object
         let response = error.response,
-            error_info = response.type.indexOf('json') !== -1 ? response.body.error : response.text;
+            error_info = ~response.type.indexOf('json') ? response.body.error : response.text;
 
         // If it is just string, there is no need to continue
         if(_.isString(error_info)){
@@ -68,11 +76,10 @@ export default class VeniceForm extends TrinityForm {
         // More errors
         let noErrors = true;
         // DB errors
-        if(error_info['db']){
+        if(error_info.db){
             noErrors = false;
             // Special DB error ?
-            let dbErrors = _.isString(error_info['db']) ? [error_info['db']] : error_info['db'];
-            _.each(dbErrors, (err)=>{
+            _.each([].concat(error_info.db), (err)=>{
                 messageService(err, 'error');
             });
 
@@ -84,31 +91,29 @@ export default class VeniceForm extends TrinityForm {
         }
 
         // Global errors - CRFS token, etc.
-        let globalErrors = error_info['global'];
-        if(globalErrors && globalErrors.length !== 0){
-            globalErrors = _.isString(globalErrors) ? [globalErrors] : globalErrors;
+        if(!_.isEmpty(error_info.global)){
             noErrors = false;
-            __globalErrors(globalErrors);
+            __globalErrors([].concat(error_info.global));
         }
         // Fields error
-        if(error_info['fields'] && Object.keys(error_info['fields']).length > 0){
+        if(!_.isEmpty(error_info.fields)){
             noErrors = false;
-            __fieldErrors.call(this, error_info['fields']);
+            _.each(error_info.fields, (message, key) => {
+                this.addError($.id(key), {
+                    key,
+                    message
+                });
+            });
         } else {
             this.unlock();
         }
 
         // Some error, but nothing related to Form
-        if(noErrors && Debug.isDev()){
+        if(noErrors && DEVELOPMENT){
             messageService('DEBUG: Request failed but no FORM errors returned! check server response', 'warning');
         }
     }
 }
-
-/**
- * Export same types
- */
-VeniceForm.formType = TrinityForm.formType;
 
 /**
  * Handles global errors
@@ -116,27 +121,11 @@ VeniceForm.formType = TrinityForm.formType;
  * @private
  */
 function __globalErrors(errors){
-    let errLength = errors.length;
-    for(let i=0; i< errLength; i++){
-        if(errors[i].indexOf("The CSRF token is invalid") > -1) {
+    _.each(errors, (err)=>{
+        if(err.indexOf("The CSRF token is invalid") > -1) {
             messageService("Something get wrong, please refresh page.", 'warning');
-        }else {
-            messageService(errors[i], 'warning');
+        } else {
+            messageService(err, 'warning');
         }
-    }
-}
-
-/**
- * Handles Field Errors - adds them to form
- * @param fields
- * @private
- */
-function __fieldErrors(fields){
-    let keys = Object.keys(fields),
-        keysLength = keys.length;
-
-    for(let i=0; i<keysLength; i++){
-        let k = keys[i];
-        this.addError(k, fields[k], document.getElementById(k));
-    }
+    });
 }

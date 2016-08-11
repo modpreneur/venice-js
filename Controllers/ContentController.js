@@ -1,14 +1,13 @@
 /**
  * Created by Jakub on 21.12.15.
  */
-
+import _ from 'lodash';
+import $ from 'jquery';
 import Events from 'trinity/utils/Events';
 import Controller from 'trinity/Controller';
 import TrinityTab from 'trinity/components/TrinityTab';
 import Collection from 'trinity/Collection';
-import _ from 'lodash';
 import VeniceForm from '../Libraries/VeniceForm';
-import $ from 'jquery';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import FormChanger from '../Libraries/FormChanger';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
@@ -17,42 +16,43 @@ import 'froala-editor/js/froala_editor.min.js';
 export default class ContetntController extends Controller {
 
     indexAction($scope) {
-        $scope.productGrid = GridBuilder.build($('#content-grid')[0], this.request.query);
+        $scope.productGrid = GridBuilder.build($.id('content-grid'), this.request.query);
     }
 
     newAction($scope) {
-        let select = $('#entity_type_select')[0],
-            jqFormDiv = $('#javascript-inserted-form'),
-            url = jqFormDiv.attr('data-changer'),
+        let selectEl = $('#entity_type_select')[0],
+            $jqFormDiv = $('#javascript-inserted-form'),
+            url = $jqFormDiv.attr('data-changer'),
             unlisteners = [];
 
-        let func = () => {
-            _.each(unlisteners,(unListener)=>{unListener();});
-            let type = select.options[select.selectedIndex].value;
-            FormChanger.refreshForm(jqFormDiv[0], url.replace('contentType', type), () => {
+        let handleFormChange = () => {
+            _.each(unlisteners, fn => fn());
 
-                $scope.form = new VeniceForm($(`form[name="${type}_content"]`)[0], VeniceForm.formType.NEW);
-                if (type == 'html' || type == 'iframe') {
-                    let jqueryContElem = $(`#${type}_content_html`);
-                    jqueryContElem.froalaEditor(JSON.parse(jqueryContElem[0].getAttribute('data-settings')));
+            let type = selectEl.options[selectEl.selectedIndex].value;
+            FormChanger.refreshForm($jqFormDiv[0], url.replace('contentType', type), () => {
+
+                $scope.form = new VeniceForm($(`form[name="${type}_content"]`)[0]);
+                if(type === 'html' || type === 'iframe') {
+                    let $froalaContainer = $(`#${type}_content_html`);
+                    $froalaContainer.froalaEditor(JSON.parse($froalaContainer.attr('data-settings')));
                 }
                 unlisteners.push(
                     ContetntController._handleHandleGeneration()
                 );
             });
         };
-        func();
-
+        // Initial
+        handleFormChange();
         //render new form after change
-        Events.listen(select, 'change', func);
+        Events.listen(selectEl, 'change', handleFormChange);
     }
 
     tabsAction($scope) {
         $scope.trinityTab = new TrinityTab();
-        let unlisteners= [];
+        let unlisteners = [];
         //On tabs load
-        $scope.trinityTab.addListener('tab-load', e => {
-            let form = e.element.q('form');
+        $scope.trinityTab.addListener('tab-load', (e) => {
+            let form = $('form', e.element)[0];
             if(form){
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
@@ -61,38 +61,44 @@ export default class ContetntController extends Controller {
             //Edit tab
             if (e.id === 'tab2') {
                 // Collection
-                $scope.collection = _.map($('[data-prototype]'), (node)=> {
-                    return new Collection(node, {addFirst: false, label: true});
+                $scope.collection = _.map($('[data-prototype]', e.element), (node)=> {
+                    return new Collection(node, {
+                        addFirst: false,
+                        label: true
+                    });
                 });
 
-                let formName = form.getAttribute('name');
-                let contentType = formName.substr(0, formName.indexOf('_'));
-                let jqFormCont = $(`#${contentType}_content_html`);
+                let formName = form.getAttribute('name'),
+                    contentType = formName.substr(0, formName.indexOf('_')),
+                    $jqFormCont = $(`#${contentType}_content_html`);
 
-                if(contentType == 'html' || contentType == 'iframe') {
-                    jqFormCont.froalaEditor(JSON.parse(jqFormCont[0].getAttribute('data-settings')));
+                if(contentType === 'html' || contentType === 'iframe') {
+                    $jqFormCont.froalaEditor(JSON.parse($jqFormCont.attr('data-settings')));
                 }
 
                 $scope.veniceForms['tab2'].success(()=>{
                     $scope.trinityTab.reload('tab1');
                 });
+
                 unlisteners.push(ContetntController._handleHandleGeneration());
-            }else if(e.id === 'tab3') {
-                let conf =$('#product-grid')[0];
-                if(conf)
-                    $scope.productGrid = GridBuilder.build(conf, this.request.query);
+
+            } else if(e.id === 'tab3') {
+                let container = $.id('product-grid');
+                if(container){
+                    $scope.productGrid = GridBuilder.build(container, this.request.query);
+                }
             }
+        });
 
-        }, this);
-
-        $scope.trinityTab.addListener('tab-unload', function(e) {
+        $scope.trinityTab.addListener('tab-unload', (e) => {
             switch(e.id){
                 // Edit
                 case 'tab2': {
-                    _.each(unlisteners,(unListener)=>{unListener();});
+                    _.each(unlisteners, fn => fn());
                 } break;
                 default : break;
             }
+
             // All
             if($scope.veniceForms[e.id]){
                 $scope.veniceForms[e.id].detach();
@@ -106,24 +112,28 @@ export default class ContetntController extends Controller {
      */
     newContentProductAction($scope) {
         //Attach VeniceForm
-        $scope.form = new VeniceForm($('form[name="content_product_type_with_hidden_content"]')[0], VeniceForm.formType.NEW);
+        $scope.form = new VeniceForm($('form[name="content_product_type_with_hidden_content"]')[0]);
     }
 
     contentProductTabsAction($scope) {
         $scope.trinityTab = new TrinityTab();
         //On tabs load
         $scope.trinityTab.addListener('tab-load',  e => {
-            if(e.id == 'tab2') {
+            if(e.id === 'tab2') {
                 $scope.veniceForms = $scope.veniceForms || {};
-                $scope.veniceForms[e.id] = new VeniceForm(e.element.q('form'));
+                $scope.veniceForms[e.id] = new VeniceForm($('form', e.element)[0]);
                 $scope.veniceForms['tab2'].success(()=> {
                     $scope.trinityTab.reload('tab1');
                 });
             }
-        }, this);
+        });
     }
 
     static _handleHandleGeneration() {
-        return handleHandleGeneration($('#javascript-inserted-form').attr('data-slugify'),$('#group_content_name')[0], $('#group_content_handle')[0])
+        return handleHandleGeneration(
+            $('#javascript-inserted-form').attr('data-slugify'),
+            $.id('group_content_name'),
+            $.id('group_content_handle')
+        );
     }
 }
