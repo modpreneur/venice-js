@@ -76,6 +76,10 @@ export default [
     {
         path: '/admin/product-access/tabs/:id(/)',
         action: 'ProductAccess.tabs'
+    },
+    {
+        path: '/admin/logger(/)(:tab)',
+        action: 'Logger.tab'
     }
 ];
 
