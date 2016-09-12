@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "Base64": "^1.0.0",
+    "codemirror": "^5.18.2",
     "fbemitter": ">=2.0.0",
     "flux": "^2.1.1",
     "froala-editor": "^2.3.3",
