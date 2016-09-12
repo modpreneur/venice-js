@@ -50,21 +50,21 @@ export function handleHandleGeneration(route, titleField, handleField) {
     }
 }
 
-/**
- * Initialize Floara editor
- * Also adds removing error fn on trinityForm error
- * TODO: @RichardBures use trinityForm error methods - @Fisa has to add method for it first
- * @param element {object} - jquery object
- * @param settings {object}
- */
-export function initializeFroala(element, settings) {
-    element.froalaEditor(settings);
-    element.on('froalaEditor.input', function () {
-        console.log('input');
-        let button = $('.trinity-form-error');
-        if(button[0]) {
-            button[0].disabled = false;
-            button.first().removeClass('trinity-form-error');
-        }
-    });
-}
+// /**
+//  * Initialize Floara editor
+//  * Also adds removing error fn on trinityForm error
+//  * TODO: @RichardBures use trinityForm error methods - @Fisa has to add method for it first
+//  * @param element {object} - jquery object
+//  * @param settings {object}
+//  */
+// export function initializeFroala(element, settings) {
+//     element.froalaEditor(settings);
+//     element.on('froalaEditor.input', function () {
+//         console.log('input');
+//         let button = $('.trinity-form-error');
+//         if(button[0]) {
+//             button[0].disabled = false;
+//             button.first().removeClass('trinity-form-error');
+//         }
+//     });
+// }

@@ -11,7 +11,7 @@ import VeniceForm from '../Libraries/VeniceForm';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import FormChanger from '../Libraries/FormChanger';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
-import 'froala-editor/js/froala_editor.min.js';
+import {startFroala} from 'trinity/utils/FroalaLib';
 
 export default class ContetntController extends Controller {
 
@@ -33,8 +33,9 @@ export default class ContetntController extends Controller {
 
                 $scope.form = new VeniceForm($(`form[name="${type}_content"]`)[0]);
                 if(type === 'html' || type === 'iframe') {
-                    let $froalaContainer = $(`#${type}_content_html`);
-                    $froalaContainer.froalaEditor(JSON.parse($froalaContainer.attr('data-settings')));
+                    // let froalaContainer = $(`#${type}_content_html`)[0];
+                    // startFroala(froalaContainer);
+                    startFroala($scope.froalaInput);
                 }
                 unlisteners.push(
                     ContetntController._handleHandleGeneration()
@@ -51,13 +52,13 @@ export default class ContetntController extends Controller {
         $scope.trinityTab = new TrinityTab();
         let unlisteners = [];
         //On tabs load
+        let app = this.getApp();
         $scope.trinityTab.addListener('tab-load', (e) => {
             let form = $('form', e.element)[0];
             if(form){
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
-
             //Edit tab
             if (e.id === 'tab2') {
                 // Collection
@@ -70,10 +71,11 @@ export default class ContetntController extends Controller {
 
                 let formName = form.getAttribute('name'),
                     contentType = formName.substr(0, formName.indexOf('_')),
-                    $jqFormCont = $(`#${contentType}_content_html`);
+                    formCont = $(`#${contentType}_content_html`)[0];
 
                 if(contentType === 'html' || contentType === 'iframe') {
-                    $jqFormCont.froalaEditor(JSON.parse($jqFormCont.attr('data-settings')));
+                    $scope[e.id] = app.parseScope();
+                    startFroala($scope[e.id].froalaInput);
                 }
 
                 $scope.veniceForms['tab2'].success(()=>{

@@ -6,12 +6,12 @@
 import $ from 'jquery';
 import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
-import {handleHandleGeneration, initializeFroala} from '../Libraries/GlobalLib';
+import {handleHandleGeneration} from '../Libraries/GlobalLib';
 import TrinityTab from 'trinity/components/TrinityTab';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NecktieDateAndTime from '../Libraries/Components/DateAndTime.jsx';
-import 'froala-editor/js/froala_editor.min.js'; // Extends jquery
+import {startFroala} from 'trinity/utils/FroalaLib';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class BlogArticleController extends Controller {
@@ -28,6 +28,7 @@ export default class BlogArticleController extends Controller {
         //Tell trinity there is tab to be loaded
         $scope.trinityTab = new TrinityTab();
 
+        let app = this.getApp();
         //On tabs load
         $scope.trinityTab.addListener('tab-load', (e)=>{
 
@@ -37,8 +38,10 @@ export default class BlogArticleController extends Controller {
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
             if(e.id === 'tab2') {
-                let $article = $('#blog_article_content');
-                $article.froalaEditor(JSON.parse($article.attr('data-settings')));
+                // let article = $('#blog_article_content')[0];
+                // startFroala(article);
+                $scope[e.id] = app.parseScope();
+                startFroala($scope[e.id].froalaInput);
 
                 let helper = $.id('blog-article-date-format'),
                     dateEl = $.id('blog_article_dateToPublish'),
@@ -100,8 +103,9 @@ export default class BlogArticleController extends Controller {
 
         BlogArticleController._handleHandleGeneration();
 
-        let $article = $('#blog_article_content');
-        initializeFroala($article, JSON.parse($article.attr('data-settings')));
+        startFroala($scope.froalaInput);
+        // let article = $('#blog_article_content')[0];
+        // startFroala(article);
 
         // HIDE TRIAL VERSION BANNER
         if(DEVELOPMENT){
