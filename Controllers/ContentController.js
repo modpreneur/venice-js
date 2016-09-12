@@ -24,7 +24,7 @@ export default class ContetntController extends Controller {
             $jqFormDiv = $('#javascript-inserted-form'),
             url = $jqFormDiv.attr('data-changer'),
             unlisteners = [];
-
+        let app = this.getApp();
         let handleFormChange = () => {
             _.each(unlisteners, fn => fn());
 
@@ -35,7 +35,8 @@ export default class ContetntController extends Controller {
                 if(type === 'html' || type === 'iframe') {
                     // let froalaContainer = $(`#${type}_content_html`)[0];
                     // startFroala(froalaContainer);
-                    startFroala($scope.froalaInput);
+                    let formScope = app.parseScope();
+                    startFroala(formScope.froalaInput);
                 }
                 unlisteners.push(
                     ContetntController._handleHandleGeneration()
