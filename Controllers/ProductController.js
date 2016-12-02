@@ -4,11 +4,10 @@
 
 import _ from 'lodash';
 import $ from 'jquery';
-import Gateway from 'trinity/Gateway';
 import VeniceForm from '../Libraries/VeniceForm';
 import TrinityTab from 'trinity/components/TrinityTab';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
-import BillingPlanGrid from '../Libraries/Grid/custom/BillingPlanGrid.jsx';
+import BillingPlanGrid from '../CustomGrids/BillingPlanGrid.jsx';
 import Controller from 'trinity/Controller';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
@@ -54,11 +53,9 @@ export default class ProductController extends Controller {
                 case 'tab4':{
                     let container = $.id('billing-plan-grid');
                     if(container){
-                        $scope.bilingPlanGrid = GridBuilder.build(container, this.request.query, BillingPlanGrid);
+                        $scope.bilingPlanGrid = GridBuilder.buildCustom(container, this.request.query, BillingPlanGrid);
                     }
                 } break;
-                // TODO: WHAT IS TAB 5 ?
-                // TODO @ZbynekFiser Why? ...its articles
                 case 'tab5':{
                     $scope.productGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
                 } break;
