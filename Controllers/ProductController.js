@@ -8,14 +8,14 @@ import Gateway from 'trinity/Gateway';
 import VeniceForm from '../Libraries/VeniceForm';
 import TrinityTab from 'trinity/components/TrinityTab';
 import {handleHandleGeneration} from '../Libraries/GlobalLib';
-import {messageService} from 'trinity/Services';
+import BillingPlanGrid from '../Libraries/Grid/custom/BillingPlanGrid.jsx';
 import Controller from 'trinity/Controller';
 import GridBuilder from '../Libraries/VeniceGridBuilder';
 
 export default class ProductController extends Controller {
 
     indexAction($scope) {
-       $scope.productGrid = GridBuilder.build($.id('product-grid'), this.request.query);
+        $scope.productGrid = GridBuilder.buildCustom($.id('product-grid'), this.request.query);
     }
 
 
@@ -54,44 +54,11 @@ export default class ProductController extends Controller {
                 case 'tab4':{
                     let container = $.id('billing-plan-grid');
                     if(container){
-                        $scope.bilingPlanGrid = GridBuilder.build(container, this.request.query);
+                        $scope.bilingPlanGrid = GridBuilder.build(container, this.request.query, BillingPlanGrid);
                     }
-
-                    window.setAsDefault = function(id){ //this way work in grids so i let it this way
-                        let $currentTarget = $('#'+id),
-                            billingPlanId = id.substr(id.lastIndexOf('-') + 1),
-                            $loadingIcon = $('#loading-icon-for-default-id-' + billingPlanId)
-                            ;
-
-                        $currentTarget.css ('display', 'none');
-                        $loadingIcon.css('display', 'block');
-
-                        // Request
-                        Gateway.putJSON($currentTarget.attr('data-href'), null,
-                            (response) => {
-                                let pins = $('.set-default');
-                                _.each($('.is-default'), (el, i) => {
-                                    if(el.style.display === 'block'){
-                                        el.style.display = 'none';
-                                        pins[i].style.display = 'block';
-                                        return false;
-                                    }
-                                });
-
-                                $(`#is-default-id-${billingPlanId}`).css('display', 'block');
-
-                                messageService(response.body.message,'success');
-                                $scope.trinityTab.reload('tab1');
-                            },
-                            (error) => {
-                                messageService(error.response.body.message, 'warning');
-                                $currentTarget.css('display', 'block');
-                            }
-                        );
-                        $loadingIcon.css('display', 'none');
-                    };
                 } break;
                 // TODO: WHAT IS TAB 5 ?
+                // TODO @ZbynekFiser Why? ...its articles
                 case 'tab5':{
                     $scope.productGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
                 } break;

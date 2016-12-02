@@ -3,34 +3,29 @@
 import _ from 'lodash';
 import React from 'react';
 
-const ORDER_BY_SPIT_RX = /:(?=ASC$|DESC$)/;
-
 /**
  * Table Header component
  */
-const Header = (props)=>{
-    let column = null,
-        order = null;
-    if(props.orderBy){
-        [column, order] = props.orderBy.split(ORDER_BY_SPIT_RX);
-    }
+const Header = (props)=> {
+    let column = props.orderBy && props.orderBy.column,
+        order = props.orderBy && (props.orderBy.order || 'ASC')
+    ;
 
     // Header Columns
-    let headerColumns = _.map(props.columns, (col, i)=>{
+    let headerColumns = _.map(props.columns, (col, i)=> {
         let className = [col.headerClassName || false, props.columnClassName || false],
             useOrderBy = col.allowOrder && !props.isEmpty;
-        
-        if(useOrderBy){
+
+        if (useOrderBy) {
             className.push(props.orderByClassName || false);
             if(column && col.name === column ){
-                className.push((!order || order === 'ASC') ?
-                    props.ascClassName : props.descClassName);
+                className.push(order === 'ASC' ? props.ascClassName : props.descClassName);
             }
 
         }
         let attributes = {
             key: i,
-            style: col.hidden ? {'display':'none'}: {},
+            style: col.hidden ? {'display': 'none'} : undefined,
             onClick: useOrderBy ? props.orderByCallback.bind(null, col) : false,
             className: _.filter(className, c => !!c).join(' ')
         };
@@ -40,7 +35,7 @@ const Header = (props)=>{
 
     return (
         <thead className={props.className}>
-            <tr className={props.rowClassName}>{headerColumns}{props.children}</tr>
+        <tr className={props.rowClassName}>{headerColumns}{props.children}</tr>
         </thead>
     );
 };
@@ -48,9 +43,9 @@ const Header = (props)=>{
 /**
  * Property types
  */
-if(DEVELOPMENT){
+if (DEVELOPMENT) {
     Header.propTypes = {
-        orderBy: React.PropTypes.string,
+        orderBy: React.PropTypes.object,
         columns: React.PropTypes.array,
         orderByCallback: React.PropTypes.func,
         /** ClassNames **/

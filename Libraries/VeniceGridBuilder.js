@@ -5,25 +5,10 @@ import {Dispatcher} from 'flux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import DataStore from './Grid/TableDataStore';
-import GridContainer from './Grid/components/GridContainer.jsx';
+import CommonGrid from './Grid/CommonGrid.jsx';
 
-const EXAMPLE_COLUMN = {
-    name:'string', // REQUIRED
-    // OPTIONAL
-    label:'string', // default name
-    allowOrder: 'boolean',
-    hidden:'boolean',
-    
-    // STYLES
-    className: 'string',
-    headerClassName: 'string',
-    
-    // FILTER
-    allowFilter: 'bool',
-    type: ['string', 'integer', 'double', 'number', 'date', 'datetime', 'time'] // one of
-};
 
-const defaultOptions = {
+const defaultOptionsNew = {
     components: {
         search: true,
         pagination: true,
@@ -33,11 +18,11 @@ const defaultOptions = {
     paginateComponent: {
         marginPagesDisplayed: 2,
         pageRangeDisplayed: 3,
-        containerClassName:'pagination',
-        subContainerClassName:'pages pagination',
-        activeClassName:'active',
-        nextLinkClassName:'pull-right bold',
-        previousLinkClassName:'bold',
+        containerClassName: 'pagination',
+        subContainerClassName: 'pages pagination',
+        activeClassName: 'active',
+        nextLinkClassName: 'pull-right bold',
+        previousLinkClassName: 'bold',
         breakLabel: React.createElement('i', {className: 'tiecons tiecons-dots-negative'}),
         previousLabel: React.createElement('i', {className: 'trinity trinity-arrow-down-two'}),
         nextLabel: React.createElement('i', {className: 'trinity trinity-arrow-down-two'})
@@ -45,84 +30,84 @@ const defaultOptions = {
     tableComponent: {
         orderByClassName: 'order-by',
         ascClassName: 'order-by-asc',
-        descClassName: 'order-by-desc',
-        header: {
-            rowClassName: '',
-            columnClassName: ''
-        },
-        rowClassName: '',
-        columnClassName: ''
+        descClassName: 'order-by-desc'
     },
-    filter: '',
-    query: {
-        page: 0,
-        limit: 15,
-        filter: undefined,
-        search: null
-    },
-    max: 1,
-    editable: false,
-    pageFilter: true
-
+    forceFilter: undefined,
+    filter: undefined,
+    search: undefined,
+    page: 0,
+    limit: 15,
+    max: 1
 };
 
 
-//todo: move to trinity?
 const VeniceGridBuilder = {
-    build(container, query, customOptions={}){
-        if(!container) {
+    build(container, query, customOptions = {}){
+        //imports do not work, i suppose, that is because imports are "executed" before app
+        // is loaded, so window.jQuery does not exist at that time
+
+        // return this.buildCustom(container, query, GridContainer, customOptions);
+        return this.buildCustom(container, query, CommonGrid, customOptions);
+    },
+
+    buildCustom(container, query, grid, customOptions = {}){
+        if (!container) {
             throw new Error('Container cannot be ' + container);
         }
-
-        let config = JSON.parse(container.getAttribute('data-config'));
-
-        let options = _.defaultsDeep(
-            // From server options
+        let options = JSON.parse(container.getAttribute('data-config'));
+        let gridConfiguration = _.defaultsDeep(
+            {},
+            // Url request settings
+            query && {
+                limit: +query.limit,
+                page: +query.page,
+                filter: query.filter && window.atob(query.filter),
+                search: query.search && window.atob(query.search),
+                orderBy: query.orderby
+            },
+            // Server settings
             {
-                query: query ? {
-                    limit: +query.limit || config['limit'] || 15,
-                    page: +query.page || undefined,
-                    orderBy: query.orderby,
-                    filter: query.filter ? window.atob(query.filter) : undefined,
-                    search: query.search ? window.atob(query.search) : undefined
-                } : {
-                    limit:  config['limit'] || 15,
-                    page: 1
-                },
-                max: config['max'],
-                filter: config['filter'],
-                editable: config['editable']
+                page: 1,
+                max: options.max,
+                limit: options.limit,
+                orderBy: options.defaultOrder,
+                forceFilter: options.forceFilter || options.filter,
+                components: options.components
             },
             customOptions,
-            defaultOptions
+            defaultOptionsNew
         );
 
-        // Logs in elastic does not have ID and _ID is random - no need to order by it
-        if(!options.query.orderBy && config.url.indexOf('/grid/elastic/') > -1){
-            options.query.orderBy = 'createdAt:DESC'
-        }
+        console.log('Grid configuration', gridConfiguration);
 
-        let DataGrid = {
-            options,
-            columns : config['columns'],
-            store : null,
-            dispatcher: new Dispatcher()
-        };
-        DataGrid.store = new DataStore(
-            DataGrid.dispatcher,
-            config['url'],
-            config['columns'],
-            {
-                ...options.query,
-                max: options.max,
-                maxPages: options.maxPages,
-                forceFilter: options.filter
-            }
-        );
+        let dispatcher = new Dispatcher(),
+            store = new DataStore(
+                dispatcher,
+                options.url,
+                // '/app_dev.php/admin/user/new',
+                options.columns,
+                {
+                    limit: gridConfiguration.limit,
+                    orderBy: gridConfiguration.orderBy,
+                    page: gridConfiguration.page,
+                    filter: gridConfiguration.filter,
+                    search: gridConfiguration.search,
+                    max: gridConfiguration.max,
+                    forceFilter: gridConfiguration.forceFilter,
+                    allowSearch: gridConfiguration.components.search,
+                    allowFilter: gridConfiguration.components.filter
+                }
+            );
 
-        ReactDOM.render(React.createElement(GridContainer, {...DataGrid}), container);
 
-        return DataGrid;
+        ReactDOM.render(React.createElement(grid, {
+            store,
+            dispatcher,
+            ...gridConfiguration,
+            columns: options.columns
+        }), container);
+
+        return gridConfiguration;
     }
 };
 

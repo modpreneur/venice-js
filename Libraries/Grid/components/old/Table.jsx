@@ -8,14 +8,14 @@ import Header from './Header.jsx';
 const NUM_REGEX = /\d+/;
 
 export default class Table extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.__store = props.dataStore;
         this.Dispatcher = props.dispatcher;
 
         //Set initial template
         this.state = {
-            data:[],
+            data: [],
             orderBy: props.initialOrderBy,
             editing: null,
             loaderIconOffset: 0,
@@ -27,9 +27,9 @@ export default class Table extends React.Component {
      * React native method - called after mounting to DOM
      * @override
      */
-    componentDidMount(){
+    componentDidMount() {
         let data = this.__store.getData();
-        if(data.length > 0){
+        if (data.length > 0) {
             this.setState(_.assign(this.state, {
                 data,
                 orderBy: this.__store.getOrderBy()
@@ -42,8 +42,8 @@ export default class Table extends React.Component {
     /**
      * Listener to every change in dataStore
      */
-    onStateChange(){
-        if(this.__store.isLoading){
+    onStateChange() {
+        if (this.__store.isLoading) {
             // recompute size of loader
             let tableHeight = Number(window.getComputedStyle(this.refs['table']).height.match(NUM_REGEX)[0]);
             // If store loading data, just change order-by and show loader
@@ -65,7 +65,7 @@ export default class Table extends React.Component {
      *  - dispatch change to dataStore
      * @param property {object}
      */
-    handleOrderBy(property){
+    handleOrderBy(property) {
         this.Dispatcher.dispatch({
             action: 'order-by',
             orderBy: property.name
@@ -76,25 +76,26 @@ export default class Table extends React.Component {
      * Renders Component into DOM
      * @returns {XML} - HTML
      */
-    render(){
-        let rows = _.map(this.state.data, (el, i)=>{
+    render() {
+        let rows = _.map(this.state.data, (el, i)=> {
             return (<UnsafeRow key={i}
-                         columns={this.props.template}
-                         data={el} />);
+                               columns={this.props.template}
+                               data={el}/>);
         });
 
         return (
-            <div className="box-table-body" style={{ position: 'relative' }}>
+            <div className="box-table-body" style={{position: 'relative'}}>
                 <div ref="loader"
                      className="text-center"
                      style={{
-                        width: '100%',
-                        height: '100%',
-                        position: 'absolute',
-                        backgroundColor: 'rgba(204, 204, 204, 0.25)',
-                        display: this.state.isFetching ? '' : 'none'
+                         width: '100%',
+                         height: '100%',
+                         position: 'absolute',
+                         backgroundColor: 'rgba(204, 204, 204, 0.25)',
+                         display: this.state.isFetching ? '' : 'none'
                      }}>
-                    <i className="tiecons tiecons-loading tiecons-rotate font-40" style={{top: this.state.loaderIconOffset + 'px'}} />
+                    <i className="tiecons tiecons-loading tiecons-rotate font-40"
+                       style={{top: this.state.loaderIconOffset + 'px'}}/>
                 </div>
                 <table ref="table" className="grid" style={{width: '100%'}}>
                     <Header
@@ -106,7 +107,7 @@ export default class Table extends React.Component {
                         {...this.props.header}
                     />
                     <tbody>
-                        {rows}
+                    {rows}
                     </tbody>
                 </table>
             </div>

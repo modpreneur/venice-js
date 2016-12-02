@@ -3,66 +3,68 @@
 import _ from 'lodash';
 import React from 'react';
 import PaginateComponent from 'react-paginate';
-import TableLoader from './TableLoader.jsx';
-import NoDataRow from './NoDataRow.jsx';
+import TableLoader from './deprecated/TableLoader.jsx';
+import NoDataRow from './deprecated/NoDataRow.jsx';
+import ErrorRow from './deprecated/ErrorRow.jsx';
 import UnsafeRow from './UnsafeRow.jsx';
-import Header from './Header.jsx';
-import GridSearch from './GridSearch.jsx';
-import GridQueryBuilder from './GridQueryBuilder.jsx';
+import Header from './deprecated/Header.jsx';
+import GridSearch from './search/GridSearchContainer.jsx';
+import GridQueryBuilder from './search/GridQueryBuilder.jsx';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {prepareFilterColumns} from '../utils.jsx';
 
 const NUM_REGEX = /\d+/;
 
-// Grid Builder
-const STRING_OPERATORS = ['equal', 'not_equal', 'contains', 'begins_with', 'ends_with'];
-const NUMBER_OPERATORS = ['equal', 'not_equal', 'less', 'less_or_equal', 'greater', 'greater_or_equal'];
-const OPERATOR_MAP = {
-    'integer':NUMBER_OPERATORS,
-    'double':NUMBER_OPERATORS,
-    'string':STRING_OPERATORS,
-    'date':NUMBER_OPERATORS
-};
-
-
 export default class GridContainer extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.__dispatcher = props.dispatcher;
         this.__store = props.store;
-        this.__filters = this.prepareFilterColumns(props.columns);
+        this.__filters = prepareFilterColumns(props.columns);
+        let components = props.components;
 
-        let query = props.options.query,
-            limit = query.limit && query.limit > 0 ? query.limit : 15,
-            maxPages = Math.ceil(props.options.max / limit),
-            page = (query.page && query.page > 0) ? query.page - 1 : 0;
+        // Is query Builder
+        this.__showQueryBuilder = components.queryBuilder && !_.isEmpty(this.__filters);
+        this.__showSearchPart = this.__showQueryBuilder || components.search;
 
-        if( page >= maxPages ){
-            page = (maxPages-1);
+        let limit = props.limit && props.limit > 0 ? props.limit : 15,
+            maxPages = Math.ceil(props.max / limit),
+            page = (props.page && props.page > 0) ? props.page - 1 : 0;
+
+        if (page >= maxPages) {
+            page = (maxPages - 1);
         }
+
         this.state = {
             page,
             maxPages,
-            data:[],
-            orderBy: query.orderBy,
+            data: [],
+            orderBy: this.__store.getOrderBy(),
             isFetching: false,
+            isError: false,
             loaderOffset: 0,
-            showQueryBuilder: !!query.filter
+            showQueryBuilder: this.__showQueryBuilder && !!props.filter
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let data = this.__store.getData();
-        if(data.length > 0){
+        if (data.length > 0) {
             this.setState({
                 data,
                 orderBy: this.__store.getOrderBy()
+            });
+        } else if (this.__store.isFetching) {
+            this.setState({
+                isFetching: true
             });
         }
         // Attach main listener
         this.__store.addListener(this.onStateChange.bind(this));
     }
 
-    onStateChange(){
-        if(this.__store.isFetching){
+    onStateChange() {
+        if (this.__store.isFetching) {
             // recompute size of loader
             let tableHeight = Number(window.getComputedStyle(this.refs['table']).height.match(NUM_REGEX)[0]);
             // If store loading data, just change order-by and show loader
@@ -73,6 +75,7 @@ export default class GridContainer extends React.Component {
         } else {
             this.setState({
                 isFetching: false,
+                isError: this.__store.isError,
                 data: this.__store.getData(),
                 orderBy: this.__store.getOrderBy(),
                 ...this.__store.getPaginationInfo()
@@ -80,23 +83,24 @@ export default class GridContainer extends React.Component {
         }
     }
 
-    handleOrderBy(property){
+    handleOrderBy(property) {
+        console.log('PROP', property);
         this.__dispatcher.dispatch({
             action: 'order-by',
-            orderBy: property.name
+            column: property.name
         });
     }
 
 
-    handlePageClick(e){
+    handlePageClick(e) {
         this.__dispatcher.dispatch({
-            action:'set-page',
+            action: 'set-page',
             page: e.selected
         });
     }
 
-    switchSearchMode(){
-        if(this.state.showQueryBuilder){
+    switchSearchMode() {
+        if (this.state.showQueryBuilder) {
             this.__dispatcher.dispatch({
                 action: 'clear-filter'
             });
@@ -106,75 +110,78 @@ export default class GridContainer extends React.Component {
         });
     }
 
-    prepareFilterColumns(){
-        return _(this.props.columns)
-            .filter(col => !!(col.name === 'id' || col.allowFilter || col.type))
-            .map((col)=>{
-                col.id = col.name;
-                if(col.id === 'id'){
-                    col.type = 'integer';
-                    col.operators = NUMBER_OPERATORS;
-                } else {
-                    col.type = col.type || 'string';
-                    col.operators = OPERATOR_MAP[col.type];
-                }
-                return col;
-            }).value();
+    repeatRequest() {
+        this.__dispatcher.dispatch({
+            action: 'repeat-request'
+        });
     }
 
-    render(){
+    buildSearchComponent(isQueryBuilder) {
+        return isQueryBuilder ?
+            (
+                <GridQueryBuilder
+                    key="query-builder"
+                    className={'margin-top-10'}
+                    rules={this.__filters}
+                    filter={this.props.filter}
+                    onSearch={(filter) => this.__store.dispatch({ action: 'filter', filter })}
+                    onClose={this.props.components.search && this.switchSearchMode.bind(this)}
+                />
+            ) : (
+            <div key="grid-search">
+                <GridSearch
+                    className={'margin-top-10'}
+                    columns={this.props.columns}
+                    search={this.props.search || ''}
+                    onSearch={(search) => this.__store.dispatch({ action: 'search', search })}
+                />
+                { this.__showQueryBuilder && // if both, show switcher
+                <a className={'row pointer'}
+                   onClick={this.switchSearchMode.bind(this)}>
+                    <div className="button-small">Advanced search</div>
+                </a>
+                }
+            </div>
+        );
+    }
+
+    render() {
         let props = this.props,
-            show = props.options.components,
+            show = props.components,
             isEmpty = _.isEmpty(this.state.data) && this.state.maxPages === 0;
 
-        let paginateOptions = props.options.paginateComponent,
-            tableOptions = props.options.tableComponent,
-            // Query builder
-            QueryBuilder = false,
-            searchClassName = '';
+        let paginateOptions = props.paginateComponent,
+            tableOptions = props.tableComponent,
+            activeSearchComponent = null;
 
-        if(show.queryBuilder && !_.isEmpty(this.__filters)){
-            let builderClassName = 'display-none';
-            if(this.state.showQueryBuilder){
-                searchClassName = 'display-none';
-                builderClassName = '';
+        if (this.__showSearchPart) {
+            if (show.search && this.__showQueryBuilder) {
+                activeSearchComponent = this.buildSearchComponent(this.state.showQueryBuilder);
+            } else if (show.search) {
+                activeSearchComponent = this.buildSearchComponent(false);
+            } else {
+                activeSearchComponent = this.buildSearchComponent(true);
             }
-            QueryBuilder = (
-                <div>
-                    <div className="row pointer">
-                        <a onClick={this.switchSearchMode.bind(this)}>
-                            Advanced search
-                        </a>
-                        <i className={"trinity trinity-close padding-left-10 " + builderClassName}
-                           onClick={this.switchSearchMode.bind(this)} />
-                    </div>
-                    <GridQueryBuilder
-                        className={builderClassName}
-                        filters={this.__filters}
-                        dispatcher={this.__dispatcher}
-                        filter={props.options.query.filter}
-                    />
-                </div>
-            );
         }
 
         return (
             <div className="wrapper-grid">
-                { show.search ?
-                    <div className="grid-search row text-center">
-                        <GridSearch
-                            className={searchClassName}
-                            columns={props.columns}
-                            dispatcher={this.__dispatcher}
-                            initialSearch={props.options.query.search}
-                        />
-                        {QueryBuilder}
-                    </div> : false
+                { (show.search || this.__showQueryBuilder) ? (
+                    <CSSTransitionGroup
+                        className="text-center padding-20"
+                        component="div"
+                        transitionName="example"
+                        transitionEnterTimeout={500}
+                        transitionLeave={false}
+                    >
+                        {activeSearchComponent}
+                    </CSSTransitionGroup> ) : false
                 }
                 <TableLoader
                     display={this.state.isFetching}
-                    iconStyle={{top: this.state.loaderOffset + 'px'}}
-                    iconClassName="tiecons tiecons-loading tiecons-rotate font-40"
+                    iconOffset={this.state.loaderOffset}
+                    text="fetching"
+                    iconClassName="tiecons tiecons-loading-rotate tiecons-rotate font-40"
                 >
                     <table ref="table" className="grid" style={{width: '100%'}}>
                         <Header
@@ -187,37 +194,37 @@ export default class GridContainer extends React.Component {
                             descClassName={tableOptions.descClassName}
                             {...tableOptions.header}
                         />
-                        <tbody>
-                        { isEmpty ?
-                            <NoDataRow colSpan={props.columns.length} />
+                        <CSSTransitionGroup
+                            component='tbody'
+                            transitionName="example"
+                            transitionEnterTimeout={200}
+                            transitionLeave={false}
+                        >
+                            { this.state.isError ?
+                                <ErrorRow
+                                    colSpan={props.columns.length}
+                                    btnCallback={this.repeatRequest.bind(this)}
+                                />
+                                : isEmpty ?
+                                <NoDataRow colSpan={props.columns.length}/>
                                 : _.map(this.state.data, (el, i)=>
-                            <UnsafeRow key={i} columns={props.columns} data={el} />)
-                        }
-                        </tbody>
+                                <UnsafeRow key={'' + i + el._id} columns={props.columns} data={el}/>
+                            )
+                            }
+                        </CSSTransitionGroup>
                     </table>
                 </TableLoader>
                 { show.pagination && this.state.maxPages > 1 ?
-                    <PaginateComponent
-                        clickCallback={this.handlePageClick.bind(this)}
-                        initialSelected={this.state.page}
-                        forceSelected={this.state.page}
-                        pageNum={this.state.maxPages}
-                        {...paginateOptions}
-                    /> : false
+                    <div className="pagination-wrapper">
+                        <PaginateComponent
+                            clickCallback={this.handlePageClick.bind(this)}
+                            initialSelected={this.state.page}
+                            forceSelected={this.state.page}
+                            pageNum={this.state.maxPages}
+                            {...paginateOptions}
+                        /></div> : false
                 }
             </div>
         );
     }
-}
-
-/**
- * Property types
- */
-if(DEVELOPMENT){
-    GridContainer.propTypes = {
-        dispatcher: React.PropTypes.object,
-        store: React.PropTypes.object,
-        columns: React.PropTypes.array,
-        initialOrderBy: React.PropTypes.string
-    };
 }
