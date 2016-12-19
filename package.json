@@ -8,14 +8,6 @@
       "stage-2"
     ]
   },
-  "files": [
-    "Controllers",
-    "Libraries",
-    "Libraries/Components",
-    "lib",
-    "*.js",
-    "*.jsx"
-  ],
   "main": "index.js",
   "format": "es6",
   "repository": {

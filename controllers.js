@@ -6,8 +6,7 @@ import ProductAccessController from './Controllers/ProductAccessController.js';
 import ProductController from './Controllers/ProductController.js';
 import UserController from './Controllers/UserController.js';
 import LoggerController from './Controllers/LoggerController';
-//nemazat, je to pro dobré účely
-console.log('nová verze');
+
 export default {
     'BillingPlanController': BillingPlanController,
     'BlogArticleController': BlogArticleController,
