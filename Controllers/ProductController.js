@@ -14,7 +14,7 @@ import GridBuilder from '../Libraries/VeniceGridBuilder';
 export default class ProductController extends Controller {
 
     indexAction($scope) {
-        $scope.productGrid = GridBuilder.buildCustom($.id('product-grid'), this.request.query);
+        $scope.productGrid = GridBuilder.build($.id('product-grid'), this.request.query);
     }
 
 
