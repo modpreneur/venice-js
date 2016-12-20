@@ -78,7 +78,7 @@ const VeniceGridBuilder = {
             defaultOptionsNew
         );
 
-        console.log('Grid configuration', gridConfiguration);
+        console.log('Grid configuration',  _.extend({},gridConfiguration));
 
         let dispatcher = new Dispatcher(),
             store = new DataStore(

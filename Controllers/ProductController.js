@@ -47,7 +47,7 @@ export default class ProductController extends Controller {
                 case 'tab3': {
                     let container = $.id('content-grid');
                     if(container){
-                        $scope.productGrid = GridBuilder.build(container, this.request.query);
+                        $scope.contentGrid = GridBuilder.build(container, this.request.query);
                     }
                 } break;
                 case 'tab4':{
@@ -57,7 +57,7 @@ export default class ProductController extends Controller {
                     }
                 } break;
                 case 'tab5':{
-                    $scope.productGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
+                    $scope.articleGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
                 } break;
             }
         });
