@@ -18,16 +18,43 @@ export default [
         action: 'Product.contentProductTabs'
     },
     {
-        path: '/admin/blogArticle/tabs/:id(/)',
+        path: '/admin/blog',
+        action: 'Blog.tabs'
+    },
+    {
+        path: '/admin/blog/article/tabs/:id(/)',
         action: 'BlogArticle.tabs'
     },
     {
-        path: '/admin/blogArticle/new(/)',
+        path: '/admin/blog/article/new(/)',
         action: 'BlogArticle.new'
     },
     {
-        path: '/admin/blogArticle(/)',
+        path: '/admin/blog/article(/)',
         action: 'BlogArticle.index'
+    },
+    {
+        path: '/admin/blog/category/tabs/:id(/)',
+        action: 'Category.tabs'
+    },
+    {
+        path: '/admin/blog/category/new(/)',
+        action: 'Category.new'
+    },
+    {
+        path: '/admin/blog/category(/)',
+        action: 'Category.index'
+    },{
+        path: '/admin/blog/tag/tabs/:id(/)',
+        action: 'Tag.tabs'
+    },
+    {
+        path: '/admin/blog/tag/new(/)',
+        action: 'Tag.new'
+    },
+    {
+        path: '/admin/blog/tag(/)',
+        action: 'Tag.index'
     },
     {
         path: '/admin/content/tabs/:id(/)',

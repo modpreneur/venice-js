@@ -50,6 +50,30 @@ export function handleHandleGeneration(route, titleField, handleField) {
     }
 }
 
+/**
+ * Dropdown menu for trinity tabs
+ * @param menuElement
+ * @param trinityTab
+ */
+export function connectTrinityTabMenu(menuElement, trinityTab) {
+    // connect Sidebar navigation
+    _.each($.find('ul li a', menuElement), el => {
+        // +1 because of  hash itself
+        if (~el.href.indexOf(location.pathname)) {
+            let index = el.href.lastIndexOf('#'),
+                tabId = null;
+            if (~index) {
+                tabId = el.href.substr(index + 1);
+            }
+            Events.listen(el, 'click', e => {
+                e.stopPropagation();
+                e.preventDefault();
+                trinityTab.setActiveTab(tabId);
+            });
+        }
+    });
+}
+
 // /**
 //  * Initialize Floara editor
 //  * Also adds removing error fn on trinityForm error

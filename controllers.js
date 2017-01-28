@@ -6,6 +6,9 @@ import ProductAccessController from './Controllers/ProductAccessController.js';
 import ProductController from './Controllers/ProductController.js';
 import UserController from './Controllers/UserController.js';
 import LoggerController from './Controllers/LoggerController';
+import BlogController from './Controllers/BlogController';
+import CategoryController from './Controllers/CategoryController';
+import TagController from './Controllers/TagController';
 
 export default {
     'BillingPlanController': BillingPlanController,
@@ -14,5 +17,8 @@ export default {
     'ProductAccessController': ProductAccessController,
     'ProductController': ProductController,
     'UserController': UserController,
-    'LoggerController': LoggerController
+    'LoggerController': LoggerController,
+    'BlogController': BlogController,
+    'CategoryController': CategoryController,
+    'TagController': TagController
 };
