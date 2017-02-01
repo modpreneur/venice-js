@@ -41,7 +41,15 @@ export default class BlogArticleController extends Controller {
                 // let article = $('#blog_article_content')[0];
                 // startFroala(article);
                 $scope[e.id] = app.parseScope();
-                startFroala($scope[e.id].froalaInput);
+                startFroala($scope[e.id].froalaInput, null, ()=> {
+                    $($scope[e.id].froalaInput)
+                        .find('.fr-element.fr-view')
+                        .bind("DOMSubtreeModified", () => {
+                            if($scope.veniceForms[e.id].hasError('blog_article[content]')) {
+                                $scope.veniceForms[e.id].removeError('blog_article[content]');
+                            }
+                        });
+                });
 
                 let helper = $.id('blog-article-date-format'),
                     dateEl = $.id('blog_article_dateToPublish'),
@@ -103,9 +111,16 @@ export default class BlogArticleController extends Controller {
 
         BlogArticleController._handleHandleGeneration();
 
-        startFroala($scope.froalaInput);
-        // let article = $('#blog_article_content')[0];
-        // startFroala(article);
+        startFroala($scope.froalaInput, null, ()=> {
+            $($scope.froalaInput)
+                .find('.fr-element.fr-view')
+                .bind("DOMSubtreeModified", () => {
+                    if($scope.form.hasError('blog_article[content]')) {
+                        $scope.form.removeError('blog_article[content]');
+                    }
+                });
+        });
+
 
         // HIDE TRIAL VERSION BANNER
         if(DEVELOPMENT){
