@@ -30,22 +30,22 @@ export default class BlogArticleController extends Controller {
 
         let app = this.getApp();
         //On tabs load
-        $scope.trinityTab.addListener('tab-load', (e)=>{
+        $scope.trinityTab.addListener('tab-load', (e) => {
 
             let form = $('form', e.element)[0];
-            if(form){
+            if (form) {
                 $scope.veniceForms = $scope.veniceForms || {};
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
-            if(e.id === 'tab2') {
+            if (e.id === 'tab2') {
                 // let article = $('#blog_article_content')[0];
                 // startFroala(article);
                 $scope[e.id] = app.parseScope();
-                startFroala($scope[e.id].froalaInput, null, ()=> {
+                startFroala($scope[e.id].froalaInput, null, () => {
                     $($scope[e.id].froalaInput)
                         .find('.fr-element.fr-view')
                         .bind("DOMSubtreeModified", () => {
-                            if($scope.veniceForms[e.id].hasError('blog_article[content]')) {
+                            if ($scope.veniceForms[e.id].hasError('blog_article[content]')) {
                                 $scope.veniceForms[e.id].removeError('blog_article[content]');
                             }
                         });
@@ -64,13 +64,14 @@ export default class BlogArticleController extends Controller {
                     ;
 
                 let fromDate = React.createElement(NecktieDateAndTime, {
-                        minDate: min,
-                        maxDate: max,
-                        type: 'dt',
-                        format: helper.value,
-                        value: new Date(helper.getAttribute('data-dateVal') * 1000),
-                        oldElem: dateEl
-                    });
+                    minDate: min,
+                    maxDate: max,
+                    type: 'dt',
+                    format: helper.value,
+                    value: new Date(helper.getAttribute('data-dateVal') * 1000),
+                    oldElem: dateEl,
+                    required: 'required'
+                });
 
                 ReactDOM.render(fromDate, div);
                 BlogArticleController._handleHandleGeneration();
@@ -95,15 +96,14 @@ export default class BlogArticleController extends Controller {
             min = BlogArticleController._parseDate(limits.min),
             max = BlogArticleController._parseDate(limits.max)
             ;
-
         let fromDate = React.createElement(NecktieDateAndTime, {
             minDate: min,
             maxDate: max,
-            type: 'd',
+            type: 'dt',
             format: format,
             value: new Date(),
             oldElem: dateEl,
-            required: true
+            required: 'required'
         });
 
         dateEl.required = true;
@@ -111,11 +111,11 @@ export default class BlogArticleController extends Controller {
 
         BlogArticleController._handleHandleGeneration();
 
-        startFroala($scope.froalaInput, null, ()=> {
+        startFroala($scope.froalaInput, null, () => {
             $($scope.froalaInput)
                 .find('.fr-element.fr-view')
                 .bind("DOMSubtreeModified", () => {
-                    if($scope.form.hasError('blog_article[content]')) {
+                    if ($scope.form.hasError('blog_article[content]')) {
                         $scope.form.removeError('blog_article[content]');
                     }
                 });
@@ -123,10 +123,10 @@ export default class BlogArticleController extends Controller {
 
 
         // HIDE TRIAL VERSION BANNER
-        if(DEVELOPMENT){
+        if (DEVELOPMENT) {
             let $notLicenced = $('a[href="https://froala.com/wysiwyg-editor"]');
-            if($notLicenced[0]){
-                $notLicenced.parent().css('display','none');
+            if ($notLicenced[0]) {
+                $notLicenced.parent().css('display', 'none');
             }
         }
     }
@@ -150,7 +150,7 @@ export default class BlogArticleController extends Controller {
      * @returns {Date}
      * @private
      */
-    static _parseDate(date){
+    static _parseDate(date) {
         return date === 'now' ?
             new Date() : new Date(date.year, date.month || 11, date.day || 31);
     }
