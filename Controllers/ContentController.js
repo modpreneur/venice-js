@@ -66,10 +66,16 @@ export default class ContetntController extends Controller {
                 $scope.collection = _.map($('[data-prototype]', e.element), (node)=> {
                     return new Collection(node, {
                         addFirst: false,
-                        label: true
+                        label: true,
+                        onAdd: el => {
+                            _.each($(el).find(':input'), input =>  $scope.veniceForms[e.id].addInput(input));
+                        },
+                        onDelete: el => {
+                            $scope.veniceForms[e.id].detach();
+                            $scope.veniceForms[e.id] = new VeniceForm(form)
+                        }
                     });
                 });
-
                 let formName = form.getAttribute('name'),
                     contentType = formName.substr(0, formName.indexOf('_')),
                     formCont = $(`#${contentType}_content_html`)[0];
