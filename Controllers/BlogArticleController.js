@@ -58,7 +58,7 @@ export default class BlogArticleController extends Controller {
                 let fromDate = React.createElement(NecktieDateAndTime, {
                         minDate: min,
                         maxDate: max,
-                        type: 'd',
+                        type: 'dt',
                         format: helper.value,
                         value: new Date(helper.getAttribute('data-dateVal') * 1000),
                         oldElem: dateEl
