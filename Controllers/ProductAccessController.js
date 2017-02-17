@@ -2,6 +2,7 @@
  * Created by Jakub Fajkus on 10.12.15.
  */
 
+import $ from 'jquery';
 import Controller from 'trinity/Controller';
 import TrinityTab from 'trinity/components/TrinityTab';
 import VeniceForm from '../Libraries/VeniceForm';

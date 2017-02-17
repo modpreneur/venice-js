@@ -44,7 +44,7 @@ export default class BlogArticleController extends Controller {
                 startFroala($scope[e.id].froalaInput, null, () => {
                     $($scope[e.id].froalaInput)
                         .find('.fr-element.fr-view')
-                        .bind("DOMSubtreeModified", () => {
+                        .bind('DOMSubtreeModified', () => {
                             if ($scope.veniceForms[e.id].hasError('blog_article[content]')) {
                                 $scope.veniceForms[e.id].removeError('blog_article[content]');
                             }
@@ -114,7 +114,7 @@ export default class BlogArticleController extends Controller {
         startFroala($scope.froalaInput, null, () => {
             $($scope.froalaInput)
                 .find('.fr-element.fr-view')
-                .bind("DOMSubtreeModified", () => {
+                .bind('DOMSubtreeModified', () => {
                     if ($scope.form.hasError('blog_article[content]')) {
                         $scope.form.removeError('blog_article[content]');
                     }

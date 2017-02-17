@@ -14,7 +14,7 @@ import {connectTrinityTabMenu} from '../Libraries/GlobalLib';
 const IDMAP = {
     '1':'blog-article-grid',
     '2':'category-grid',
-    '3':'tag-grid',
+    '3':'tag-grid'
 };
 
 export default class BlogController extends Controller{

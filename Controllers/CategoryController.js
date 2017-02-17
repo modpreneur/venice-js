@@ -1,7 +1,6 @@
 'use strict';
 
 import $ from 'jquery';
-import _ from 'lodash';
 import Controller from 'trinity/Controller';
 import VeniceForm from '../Libraries/VeniceForm';
 import TrinityTab from 'trinity/components/TrinityTab';
@@ -15,8 +14,6 @@ export default class CategoryController extends Controller{
      * @param $scope
      */
     tabsAction($scope){
-        let query = _.clone(this.request.query);
-
         let app = this.getApp();
         $scope.trinityTab = new TrinityTab();
         $scope.trinityTab.addListener('tab-load', function(e){

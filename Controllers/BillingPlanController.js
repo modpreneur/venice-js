@@ -14,7 +14,7 @@ export default class BillingPlanController extends Controller {
         $scope.trinityTab = new TrinityTab();
 
         //On tabs load
-        $scope.trinityTab.addListener('tab-load', (e)=>{
+        $scope.trinityTab.addListener('tab-load', (e) => {
             let form = $('form', e.element)[0];
             if(form){
                 $scope.veniceForms = $scope.veniceForms || {};
