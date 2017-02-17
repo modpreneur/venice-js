@@ -63,31 +63,28 @@ export default class ContetntController extends Controller {
             //Edit tab
             if (e.id === 'tab2') {
                 // Collection
-                $scope.collection = _.map($('[data-prototype]', e.element), (node)=> {
+                $scope.collection = _.map($('[data-prototype]', e.element), (node) => {
                     return new Collection(node, {
                         addFirst: false,
                         label: true,
                         onAdd: el => {
                             _.each($(el).find(':input'), input =>  $scope.veniceForms[e.id].addInput(input));
                         },
-                        onDelete: el => {
+                        onDelete: () => {
                             $scope.veniceForms[e.id].detach();
-                            $scope.veniceForms[e.id] = new VeniceForm(form)
+                            $scope.veniceForms[e.id] = new VeniceForm(form);
                         }
                     });
                 });
                 let formName = form.getAttribute('name'),
-                    contentType = formName.substr(0, formName.indexOf('_')),
-                    formCont = $(`#${contentType}_content_html`)[0];
+                    contentType = formName.substr(0, formName.indexOf('_'));
 
                 if(contentType === 'html' || contentType === 'iframe') {
                     $scope[e.id] = app.parseScope();
                     startFroala($scope[e.id].froalaInput);
                 }
 
-                $scope.veniceForms['tab2'].success(()=>{
-                    $scope.trinityTab.reload('tab1');
-                });
+                $scope.veniceForms['tab2'].success(() => $scope.trinityTab.reload('tab1'));
 
                 unlisteners.push(ContetntController._handleHandleGeneration());
 
@@ -135,7 +132,7 @@ export default class ContetntController extends Controller {
             }
 
             if(e.id === 'tab2') {
-                $scope.veniceForms['tab2'].success(()=> {
+                $scope.veniceForms['tab2'].success(() => {
                     $scope.trinityTab.reload('tab1');
                 });
             }

@@ -40,7 +40,7 @@ export default class ProductController extends Controller {
                 case 'tab2': {
                     unlisteners.push(ProductController._handleHandleGeneration());
 
-                    $scope.veniceForms['tab2'].success(()=>{
+                    $scope.veniceForms['tab2'].success(() => {
                         $scope.trinityTab.reload('tab1');
                     });
                 } break;
@@ -59,6 +59,7 @@ export default class ProductController extends Controller {
                 case 'tab5':{
                     $scope.articleGrid = GridBuilder.build($.id('blog-article-grid'), this.request.query);
                 } break;
+                default: break;
             }
         });
 

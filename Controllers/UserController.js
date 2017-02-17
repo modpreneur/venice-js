@@ -29,7 +29,7 @@ export default class ContetntController extends Controller {
                 $scope.veniceForms[e.id] = new VeniceForm(form);
             }
             if(e.id === 'tab2') {
-                $scope.veniceForms['tab2'].success(()=>{
+                $scope.veniceForms['tab2'].success(() => {
                     $scope.trinityTab.reload('tab1');
                 });
             } else if (e.id === 'tab3') {
