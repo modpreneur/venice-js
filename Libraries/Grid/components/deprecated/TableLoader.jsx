@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const TableLoader = (props)=> {
+const TableLoader = (props) => {
     return (
         <div className="box-table-body" style={{
             position: 'relative',

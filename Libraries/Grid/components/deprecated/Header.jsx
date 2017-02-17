@@ -6,19 +6,19 @@ import React from 'react';
 /**
  * Table Header component
  */
-const Header = (props)=> {
+const Header = (props) => {
     let column = props.orderBy && props.orderBy.column,
         order = props.orderBy && (props.orderBy.order || 'ASC')
     ;
 
     // Header Columns
-    let headerColumns = _.map(props.columns, (col, i)=> {
+    let headerColumns = _.map(props.columns, (col, i) => {
         let className = [col.headerClassName || false, props.columnClassName || false],
             useOrderBy = col.allowOrder && !props.isEmpty;
 
         if (useOrderBy) {
             className.push(props.orderByClassName || false);
-            if(column && col.name === column ){
+            if(column && col.name === column){
                 className.push(order === 'ASC' ? props.ascClassName : props.descClassName);
             }
 

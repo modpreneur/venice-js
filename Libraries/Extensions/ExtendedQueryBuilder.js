@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import $ from 'jquery';
-import '../../lib/query-builder.js';
+import '../../lib/query-builder.2.4.js';
 import '../../lib/query-builder.css';
 
 const QueryBuilder = $.fn.queryBuilder.constructor;

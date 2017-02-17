@@ -64,7 +64,7 @@ const QB_OPERATOR_MAP = {
 };
 
 function createFilter(filterObj) {
-    return _.map(filterObj.rules, (rule)=> {
+    return _.map(filterObj.rules, (rule) => {
         if (rule.condition) {
             return '(' + createFilter(rule) + ')';
         }
@@ -83,7 +83,7 @@ function parseFilter(filterStr, specialRules) {
             rules: null
         };
 
-    let parsed = _.map(filterStr, (c, i)=> {
+    let parsed = _.map(filterStr, (c, i) => {
         if (c === '(') {
             counter++;
             if (_.isNull(startIndex)) {
@@ -110,7 +110,7 @@ function parseFilter(filterStr, specialRules) {
     }
 
     counter = 0;
-    rulesObj.rules = _.map(rules, (cond)=> {
+    rulesObj.rules = _.map(rules, (cond) => {
 
         if (IS_WRAPPED_RX.test(cond)) {
             return deepRules[counter++];
@@ -154,7 +154,7 @@ function parseFilter(filterStr, specialRules) {
 
 function modifyRules(rules, filters) {
     let modified = $.extend({}, rules);
-    _.each(modified.rules, rule=> {
+    _.each(modified.rules, rule => {
         if (filters[rule.id].necktie && filters[rule.id].necktie.unix) {
             let date = (new window.DateFormatter()).parseDate(rule.value, filters[rule.id].plugin.format),
                 timeZone = -date.getTimezoneOffset() * 60; //in seconds (do not remove -)

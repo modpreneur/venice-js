@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-const NoDataRow = (props)=>{
+const NoDataRow = (props) => {
     return (
         <tr>
             <td colSpan={props.colSpan} className="row">

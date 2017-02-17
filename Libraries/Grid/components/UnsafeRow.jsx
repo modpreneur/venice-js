@@ -6,8 +6,8 @@ import React from 'react';
 /**
  * Simple Row
  */
-const UnsafeRow = (props)=> {
-    let data = _.map(props.columns, (col, i)=> {
+const UnsafeRow = (props) => {
+    let data = _.map(props.columns, (col, i) => {
         let colProps = {
             key: i,
             style: col.hidden ? {'display': 'none'} : {},

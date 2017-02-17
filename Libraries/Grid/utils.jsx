@@ -45,7 +45,7 @@ const SPECIAL_TYPES = ['enum', 'array'],
 export function prepareFilterColumns(columns) {
     return _(columns)
         .filter(col => !!(col.name === 'id' || col.allowFilter || col.type))
-        .map((col)=> {
+        .map((col) => {
             col.id = col.name;
             if (col.id === 'id') {
                 col.type = 'integer';

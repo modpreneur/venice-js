@@ -159,7 +159,7 @@ export default class DefaultGrid extends BaseGrid {
                 activeComponent: activeSearchComponent || 'QUERY_BUILDER',
                 onClose: this.switchSearchMode.bind(this),
                 onSearch: (search) => this.handleSearch(search),
-                onQuerySearch:  (filter) => this.handleQuerySearch(filter),
+                onQuerySearch:  (filter) => this.handleQuerySearch(filter)
             };
         }
 

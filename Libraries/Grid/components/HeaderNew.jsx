@@ -30,7 +30,7 @@ const Header = ({
     ;
 
     // Header Columns
-    let headerColumns = _.map(columns, (col, i)=>{
+    let headerColumns = _.map(columns, (col, i) => {
         let className = col.headerClassName;
 
         // If no data to show -> dont show any order-by sign
@@ -38,7 +38,7 @@ const Header = ({
         
         if(useOrderBy){
             className += ' ' + orderByClassName;
-            if(column && col.name === column ){
+            if(column && col.name === column){
                 className += ' ' + (order === 'ASC' ? ascClassName : descClassName);
             }
         }
@@ -62,7 +62,7 @@ const Header = ({
                             <input onClick={onSelect} id='select-all' className="edit-input display-none" type="checkbox" />
                             <label htmlFor='select-all' ><span></span></label>
                         </div>
-                    </td> ) : false
+                    </td>) : false
                 }
                 {headerColumns}
                 {children}

@@ -77,7 +77,7 @@ export default class Table extends React.Component {
      * @returns {XML} - HTML
      */
     render() {
-        let rows = _.map(this.state.data, (el, i)=> {
+        let rows = _.map(this.state.data, (el, i) => {
             return (<UnsafeRow key={i}
                                columns={this.props.template}
                                data={el}/>);

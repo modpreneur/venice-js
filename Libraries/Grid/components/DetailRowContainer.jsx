@@ -48,7 +48,7 @@ if(DEVELOPMENT){
     DetailRowContainer.propTypes = {
         id: React.PropTypes.string,
         isActive: React.PropTypes.bool,
-        colSpan: React.PropTypes.number,
+        colSpan: React.PropTypes.number
     };
 }
 

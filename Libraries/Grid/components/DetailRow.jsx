@@ -13,7 +13,7 @@ const DetailRow = ({
     /** children **/
     children
 }) => {
-    let dataColumns = _.map(columns, (col, i)=>{
+    let dataColumns = _.map(columns, (col, i) => {
         let colProps = {
             key: i,
             style: col.hidden ? {'display':'none'} : {},
@@ -26,11 +26,11 @@ const DetailRow = ({
         <tr {...attributes}>
             {isEditMode ? (
                 <td>
-                    <div onClick={(e)=>e.stopPropagation()} className="text-center" >
+                    <div onClick={(e) => e.stopPropagation()} className="text-center" >
                         <input onClick={onSelect}  id={data['_id']} className="edit-input display-none" type="checkbox" />
                         <label htmlFor={data['_id']} ><span></span></label>
                     </div>
-                </td> ) : false
+                </td>) : false
             }
             {dataColumns}
             {children}

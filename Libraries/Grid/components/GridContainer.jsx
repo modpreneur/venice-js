@@ -175,7 +175,7 @@ export default class GridContainer extends React.Component {
                         transitionLeave={false}
                     >
                         {activeSearchComponent}
-                    </CSSTransitionGroup> ) : false
+                    </CSSTransitionGroup>) : false
                 }
                 <TableLoader
                     display={this.state.isFetching}
@@ -207,7 +207,7 @@ export default class GridContainer extends React.Component {
                                 />
                                 : isEmpty ?
                                 <NoDataRow colSpan={props.columns.length}/>
-                                : _.map(this.state.data, (el, i)=>
+                                : _.map(this.state.data, (el, i) =>
                                 <UnsafeRow key={'' + i + el._id} columns={props.columns} data={el}/>
                             )
                             }

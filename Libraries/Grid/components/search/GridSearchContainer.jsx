@@ -19,7 +19,7 @@ export default class GridSearchContainer extends React.Component {
         if(val.length === 0){
             this.props.onSearch(val);
         } else {
-            this.__timerID = setTimeout(()=>{
+            this.__timerID = setTimeout(() => {
                 // Clear
                 clearTimeout(this.__timerID);
                 this.__timerID = null;
