@@ -10,4 +10,7 @@ import 'script!froala-editor/js/plugins/code_view.min.js';
 import 'script!froala-editor/js/plugins/entities.min.js';
 import 'script!froala-editor/js/plugins/link.min.js';
 import 'script!froala-editor/js/plugins/url.min.js';
+import 'script!froala-editor/js/plugins/image.min.js';
 import 'script!froala-editor/js/languages/en_gb.js';
+
+

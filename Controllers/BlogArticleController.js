@@ -110,7 +110,6 @@ export default class BlogArticleController extends Controller {
         ReactDOM.render(fromDate, div);
 
         BlogArticleController._handleHandleGeneration();
-
         startFroala($scope.froalaInput, null, () => {
             $($scope.froalaInput)
                 .find('.fr-element.fr-view')
